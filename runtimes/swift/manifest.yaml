@@ -44,7 +44,7 @@ packages:
       actions:
           # Creating action that is printing data which is written to the database
           message-ify-github-response:
-              function: actions/repackage-message.swift
+              function: actions/send-message.swift
 
       sequences:
           # Creating sequence to connect the github-repackage-info action with the slack post action

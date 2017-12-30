@@ -3,7 +3,7 @@
 //  the whisk.system/slack/post action.
 function main(array $args) : array
 {
-    $message = "commit " + $args["head_commit"]["id"] + " was pushed to " + $args["repository"]["full_name"];
+    $message = "Your scrum is starting now.  Time to find your team!";
     return ["text" => $message];
 }
 ?>

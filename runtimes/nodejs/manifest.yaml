@@ -38,15 +38,15 @@ packages:
 
       actions:
           # Creating action that is printing data which is written to the database
-          message-ify-github-response:
-              function: actions/repackage-message.js
+          send-message:
+              function: actions/send-message.js
 
       sequences:
           # Creating sequence to connect the github-repackage-info action with the slack post action
-          github_slack_integration_sequence:
-              actions: message-ify-github-response, openwhisk-slack/post
+          timer_slack_integration_sequence:
+              actions: send-message, openwhisk-slack/post
       rules:
           # Creating rule that maps github push trigger to sequence
-          connect-github-trigger-to-slack-action:
-              trigger: github-trigger
-              action: github_slack_integration_sequence
+          connect-timer-to-slack-action:
+              trigger: alarm-trigger
+              action: timer_slack_integration_sequence

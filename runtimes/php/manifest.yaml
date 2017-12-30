@@ -44,7 +44,7 @@ packages:
       actions:
           # Creating action that is printing data which is written to the database
           message-ify-github-response:
-              function: actions/repackage-message.php
+              function: actions/send-message.php
 
       sequences:
           # Creating sequence to connect the github-repackage-info action with the slack post action
