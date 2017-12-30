@@ -1,0 +1,31 @@
+{
+  "name": "push notifier",
+  "description": "Post to Slack when a new commit is made in a Github repository",
+  "long_description": "This blueprint will create a sequence of actions, and a trigger that will kick off that sequence.  The trigger is fired when a user performs a git push to a specific repository.  The first action in the sequence will create a message in a format that is consumeable by the slack/post action. The resulting message will be posted to slack.",
+  "url": "https://github.com/ibm-functions/blueprint-github-trigger-slack",
+  "runtime": [{
+      "name": "Node.js 6",
+      "kind": "nodejs:6",
+      "type": "node"
+    },
+    {
+      "name": "Swift 3.1.1",
+      "kind": "swift:3.1.1",
+      "type": "swift"
+    },
+    {
+      "name": "Python 3",
+      "kind": "python:3",
+      "type": "python"
+    },
+    {
+      "name": "PHP 7.1",
+      "kind": "php:7.1",
+      "type": "php"
+  }],
+  "categories": [
+    "nodejs",
+    "slack",
+    "github"
+  ]
+}
