@@ -6,6 +6,6 @@ var request_promise = require('request-promise');
   the whisk.system/slack/post action.
 */
 function main(params){
-  var message = `commit ${params.head_commit.id} was pushed to ${params.repository.full_name}`;
+  var message = "Your scrum is starting now.  Time to find your team!";
   return {text: message}
 }
