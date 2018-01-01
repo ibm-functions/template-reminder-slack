@@ -1,57 +1,47 @@
 # Deployment using this manifest file creates following OpenWhisk components:
 #   Package:    openwhisk-slack
-#   Package:    openwhisk-github
-#   Action:     message-ify-github-response
-#   Sequence:   github_slack_integration_sequence
-#   Trigger:    github-trigger
-#   Rule:       connect-github-trigger-to-slack-action
+#   Package:    openwhisk-alarms
+#   Action:     send-message
+#   Sequence:   alarm_slack_integration_sequence
+#   Trigger:    alarm-trigger
+#   Rule:       connect-alarm-to-slack-action
 
 # This manifest file reads following env. variables:
-#   SLACK_USERNAME
-#   SLACK_URL
-#   SLACK_CHANNEL
-#   SLACK_TOKEN
-#   GITHUB_USERNAME
-#   GITHUB_REPOSITORY
-#   GITHUB_ACCESS_TOKEN
+#   SLACK_WEBHOOK_URL
+#   ALARM_CRON
 
 packages:
     $PACKAGE_NAME:
       namespace: _
       dependencies:
-          # binding github package named openwhisk-github and slack package openwhisk-slack
+          # binding alarms package named openwhisk-alarms and slack package openwhisk-slack
           openwhisk-slack:
               location: /whisk.system/slack
               inputs:
-                  username: $SLACK_USERNAME
-                  url: $SLACK_URL
-                  channel: $SLACK_CHANNEL
-                  token: $SLACK_TOKEN
-          openwhisk-github:
-              location: /whisk.system/github
+                  url: $SLACK_WEBHOOK_URL
+          openwhisk-alarms:
+              location: /whisk.system/alarms
               inputs:
-                username: $GITHUB_USERNAME
-                repository: $GITHUB_REPOSITORY
-                accessToken: $GITHUB_ACCESS_TOKEN
+                cron: $ALARM_CRON
 
       triggers:
-          # Creating trigger to fire events when a user pushes to a github repository
-          github-trigger:
-              feed: openwhisk-github/webhook
+          # Creating trigger to fire events on alarm schedule
+          alarm-trigger:
+              feed: openwhisk-alarms/alarm
               inputs:
                   events: 'push'
 
       actions:
-          # Creating action that is printing data which is written to the database
-          message-ify-github-response:
+          # Creating action that is sending message to slack post action
+          send-message:
               function: actions/send-message.py
 
       sequences:
-          # Creating sequence to connect the github-repackage-info action with the slack post action
-          github_slack_integration_sequence:
-              actions: message-ify-github-response, openwhisk-slack/post
+          # Creating sequence to connect the send-message action with the slack post action
+          alarm_slack_integration_sequence:
+              actions: send-message, openwhisk-slack/post
       rules:
-          # Creating rule that maps github push trigger to sequence
-          connect-github-trigger-to-slack-action:
-              trigger: github-trigger
-              action: github_slack_integration_sequence
+          # Creating rule that maps alarm trigger to sequence
+          connect-alarm-to-slack-action:
+              trigger: alarm-trigger
+              action: alarm_slack_integration_sequence
