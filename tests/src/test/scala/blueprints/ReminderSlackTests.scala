@@ -1,0 +1,112 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package packages
+
+
+import org.junit.runner.RunWith
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.junit.JUnitRunner
+import common.{TestHelpers, Wsk, WskProps, WskTestHelpers}
+import java.io._
+// import spray.json.DefaultJsonProtocol.StringJsonFormat
+// import spray.json.pimpAny
+
+@RunWith(classOf[JUnitRunner])
+class ReminderSlackTests extends TestHelpers
+    with WskTestHelpers
+    with BeforeAndAfterAll {
+
+    implicit val wskprops = WskProps()
+    val wsk = new Wsk()
+
+    //set parameters for deploy tests
+    val nodejsfolder = "../runtimes/nodejs/actions";
+    val phpfolder = "../runtimes/php/actions";
+    val pythonfolder = "../runtimes/python/actions";
+    val swiftfolder = "../runtimes/swift/actions";
+
+    behavior of "Get Slack Reminder Blueprint"
+
+    /**
+     * Test the nodejs "Get Slack Reminder Blueprint" blueprint
+     */
+     it should "invoke send-message.js and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
+       val name = "messageNode"
+       val file = Some(new File(nodejsfolder, "send-message.js").toString());
+       assetHelper.withCleaner(wsk.action, name) { (action, _) =>
+         action.create(name, file)
+       }
+
+       withActivation(wsk.activation, wsk.action.invoke(name)) {
+         activation =>
+          activation.response.success shouldBe true
+          activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
+       }
+     }
+
+     /**
+      * Test the php "Get Slack Reminder Blueprint" blueprint
+      */
+      it should "invoke send-message.php and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
+        val name = "messagePhp"
+        val file = Some(new File(phpfolder, "send-message.php").toString());
+        assetHelper.withCleaner(wsk.action, name) { (action, _) =>
+          action.create(name, file)
+        }
+
+        withActivation(wsk.activation, wsk.action.invoke(name)) {
+          activation =>
+           activation.response.success shouldBe true
+           activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
+        }
+      }
+
+      /**
+       * Test the python "Get Slack Reminder Blueprint" blueprint
+       */
+       it should "invoke send-message.py and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
+         val name = "messagePython"
+         val file = Some(new File(pythonfolder, "send-message.py").toString());
+         assetHelper.withCleaner(wsk.action, name) { (action, _) =>
+           action.create(name, file)
+         }
+
+         withActivation(wsk.activation, wsk.action.invoke(name)) {
+           activation =>
+            activation.response.success shouldBe true
+            activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
+         }
+       }
+
+       /**
+        * Test the swift "Get Slack Reminder Blueprint" blueprint
+        */
+        it should "invoke send-message.swift and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
+          val name = "messageSwift"
+          val file = Some(new File(swiftfolder, "send-message.swift").toString());
+          assetHelper.withCleaner(wsk.action, name) { (action, _) =>
+            action.create(name, file)
+          }
+
+          withActivation(wsk.activation, wsk.action.invoke(name)) {
+            activation =>
+             activation.response.success shouldBe true
+             activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
+          }
+        }
+}
