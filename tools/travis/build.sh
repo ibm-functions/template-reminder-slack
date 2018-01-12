@@ -53,5 +53,5 @@ cd $DEPLOYDIR/packages
 source $DEPLOYDIR/packages/installCatalog.sh $AUTH_KEY $EDGE_HOST $WSK_CLI
 
 # Test
-cd $ROOTDIR/blueprint-reminder-slack
+cd $ROOTDIR/template-reminder-slack
 ./gradlew :tests:test
