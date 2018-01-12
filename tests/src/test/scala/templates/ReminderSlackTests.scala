@@ -40,10 +40,10 @@ class ReminderSlackTests extends TestHelpers
     val pythonfolder = "../runtimes/python/actions";
     val swiftfolder = "../runtimes/swift/actions";
 
-    behavior of "Get Slack Reminder Blueprint"
+    behavior of "Get Slack Reminder Template"
 
     /**
-     * Test the nodejs "Get Slack Reminder Blueprint" blueprint
+     * Test the nodejs "Get Slack Reminder Template" template
      */
      it should "invoke send-message.js and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
        val name = "messageNode"
@@ -60,7 +60,7 @@ class ReminderSlackTests extends TestHelpers
      }
 
      /**
-      * Test the php "Get Slack Reminder Blueprint" blueprint
+      * Test the php "Get Slack Reminder Template" template
       */
       it should "invoke send-message.php and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
         val name = "messagePhp"
@@ -77,7 +77,7 @@ class ReminderSlackTests extends TestHelpers
       }
 
       /**
-       * Test the python "Get Slack Reminder Blueprint" blueprint
+       * Test the python "Get Slack Reminder Template" template
        */
        it should "invoke send-message.py and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
          val name = "messagePython"
@@ -94,7 +94,7 @@ class ReminderSlackTests extends TestHelpers
        }
 
        /**
-        * Test the swift "Get Slack Reminder Blueprint" blueprint
+        * Test the swift "Get Slack Reminder Template" template
         */
         it should "invoke send-message.swift and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
           val name = "messageSwift"
