@@ -3,8 +3,8 @@
 #   Package:    openwhisk-alarms
 #   Action:     send-message
 #   Sequence:   alarm_slack_integration_sequence
-#   Trigger:    alarm-trigger
-#   Rule:       connect-alarm-to-slack-action
+#   Trigger:    $TRIGGER_NAME
+#   Rule:       $RULE_NAME
 
 # This manifest file reads following env. variables:
 #   SLACK_WEBHOOK_URL
@@ -26,7 +26,7 @@ packages:
 
       triggers:
           # Creating trigger to fire events on alarm schedule
-          alarm-trigger:
+          $TRIGGER_NAME:
               feed: openwhisk-alarms/alarm
               inputs:
                   events: 'push'
@@ -42,6 +42,6 @@ packages:
               actions: send-message, openwhisk-slack/post
       rules:
           # Creating rule that maps alarm trigger to sequence
-          connect-alarm-to-slack-action:
-              trigger: alarm-trigger
+          $RULE_NAME:
+              trigger: $TRIGGER_NAME
               action: alarm_slack_integration_sequence
