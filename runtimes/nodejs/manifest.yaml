@@ -35,6 +35,7 @@ packages:
           # Creating action that is sending message to slack post action
           send-message:
               function: actions/send-message.js
+              runtime: nodejs:8
 
       sequences:
           # Creating sequence to connect the send-message action with the slack post action

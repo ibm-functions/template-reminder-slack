@@ -36,10 +36,10 @@ class ReminderSlackTests extends TestHelpers
 
     //set parameters for deploy tests
     val nodejs6folder = "../runtimes/nodejs-6/actions";
-    val nodejs8folder = "../runtimes/nodejs-8/actions";
-    val phpfolder = "../runtimes/php-7.1/actions";
-    val pythonfolder = "../runtimes/python-3/actions";
-    val swiftfolder = "../runtimes/swift-3.1.1/actions";
+    val nodejs8folder = "../runtimes/nodejs/actions";
+    val phpfolder = "../runtimes/php/actions";
+    val pythonfolder = "../runtimes/python/actions";
+    val swiftfolder = "../runtimes/swift/actions";
 
     behavior of "Get Slack Reminder Template"
 
@@ -65,8 +65,10 @@ class ReminderSlackTests extends TestHelpers
       it should "invoke nodejs 8 send-message.js and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
         val name = "messageNode"
         val file = Some(new File(nodejs8folder, "send-message.js").toString());
+        val kind = Option("nodejs:8")
+
         assetHelper.withCleaner(wsk.action, name) { (action, _) =>
-          action.create(name, file)
+          action.create(name, file, kind)
         }
 
         withActivation(wsk.activation, wsk.action.invoke(name)) {
