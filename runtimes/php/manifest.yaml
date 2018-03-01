@@ -2,7 +2,7 @@
 #   Package:    openwhisk-slack
 #   Package:    openwhisk-alarms
 #   Action:     send-message
-#   Sequence:   post_message_slack_sequence
+#   Sequence:   alarm_slack_integration_sequence
 #   Trigger:    $TRIGGER_NAME
 #   Rule:       $RULE_NAME
 
@@ -35,14 +35,13 @@ packages:
           # Creating action that is sending message to slack post action
           send-message:
               function: actions/send-message.php
-              runtime: php:7.1
 
       sequences:
           # Creating sequence to connect the send-message action with the slack post action
-          post_message_slack_sequence:
+          alarm_slack_integration_sequence:
               actions: send-message, openwhisk-slack/post
       rules:
           # Creating rule that maps alarm trigger to sequence
           $RULE_NAME:
               trigger: $TRIGGER_NAME
-              action: post_message_slack_sequence
+              action: alarm_slack_integration_sequence
