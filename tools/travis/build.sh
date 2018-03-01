@@ -4,14 +4,11 @@
 SCRIPTDIR=$(cd $(dirname "$0") && pwd)
 ROOTDIR="$SCRIPTDIR/../../.."
 WHISKDIR="$ROOTDIR/openwhisk"
-DEPLOYDIR="$ROOTDIR/packageDeploy"
+PACKAGESDIR="$WHISKDIR/catalog/extra-packages"
 
 cd $WHISKDIR
 
 tools/build/scanCode.py "$SCRIPTDIR/../.."
-
-# No point to continue with PRs, since encryption is on
-if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then exit 0; fi
 
 cd $WHISKDIR/ansible
 
@@ -27,7 +24,6 @@ cd $WHISKDIR
 ./gradlew distDocker
 
 cd $WHISKDIR/ansible
-
 
 $ANSIBLE_CMD wipe.yml
 $ANSIBLE_CMD openwhisk.yml
@@ -48,9 +44,13 @@ EDGE_HOST=$(grep '^edge.host=' $WHISKPROPS_FILE | cut -d'=' -f2)
 # Set Environment
 export OPENWHISK_HOME=$WHISKDIR
 
+# Place this template in correct location to be included in packageDeploy
+mkdir -p $PACKAGESDIR/preInstalled/ibm-functions
+cp -r $ROOTDIR/template-reminder-slack $PACKAGESDIR/preInstalled/ibm-functions/
+
 # Install the package
-cd $DEPLOYDIR/packages
-source $DEPLOYDIR/packages/installCatalog.sh $AUTH_KEY $EDGE_HOST $WSK_CLI
+cd $PACKAGESDIR/packageDeploy/packages
+source $PACKAGESDIR/packageDeploy/packages/installCatalog.sh $AUTH_KEY $EDGE_HOST $WSK_CLI
 
 # Test
 cd $ROOTDIR/template-reminder-slack
