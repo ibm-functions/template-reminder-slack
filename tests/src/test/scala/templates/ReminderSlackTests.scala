@@ -21,8 +21,14 @@ package packages
 import org.junit.runner.RunWith
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.junit.JUnitRunner
+import common.TestUtils.RunResult
 import common.{TestHelpers, Wsk, WskProps, WskTestHelpers}
 import java.io._
+
+import com.jayway.restassured.RestAssured
+import com.jayway.restassured.config.SSLConfig
+import spray.json._
+
 // import spray.json.DefaultJsonProtocol.StringJsonFormat
 // import spray.json.pimpAny
 
@@ -33,6 +39,9 @@ class ReminderSlackTests extends TestHelpers
 
     implicit val wskprops = WskProps()
     val wsk = new Wsk()
+
+    // statuses for deployWeb
+    val successStatus = """"status":"success""""
 
     val deployTestRepo = "https://github.com/ibm-functions/template-reminder-slack"
     val slackReminderActionPackage = "myPackage/send-message"
@@ -81,7 +90,13 @@ class ReminderSlackTests extends TestHelpers
       makePostCallWithExpectedResult(JsObject(
         "gitUrl" -> JsString(deployTestRepo),
         "manifestPath" -> JsString(node8RuntimePath),
-        "envData" -> JsObject("PACKAGE_NAME" -> JsString("myPackage")),
+        "envData" -> JsObject(
+            "PACKAGE_NAME" -> JsString("myPackage"),
+            "SLACK_WEBHOOK_URL" -> JsString("https://slack.url.com"),
+            "ALARM_CRON" -> JsObject("PACKAGE_NAME" -> JsString("1 * * * ")),
+            "RULE_NAME" -> JsString("myRule"),
+            "TRIGGER_NAME" -> JsString("myTrigger")
+        ),
         "wskApiHost" -> JsString(wskprops.apihost),
         "wskAuth" -> JsString(wskprops.authKey)
       ), successStatus, 200);
@@ -102,7 +117,13 @@ class ReminderSlackTests extends TestHelpers
       makePostCallWithExpectedResult(JsObject(
         "gitUrl" -> JsString(deployTestRepo),
         "manifestPath" -> JsString(node6RuntimePath),
-        "envData" -> JsObject("PACKAGE_NAME" -> JsString("myPackage")),
+        "envData" -> JsObject(
+            "PACKAGE_NAME" -> JsString("myPackage"),
+            "SLACK_WEBHOOK_URL" -> JsString("https://slack.url.com"),
+            "ALARM_CRON" -> JsObject("PACKAGE_NAME" -> JsString("1 * * * ")),
+            "RULE_NAME" -> JsString("myRule"),
+            "TRIGGER_NAME" -> JsString("myTrigger")
+        ),
         "wskApiHost" -> JsString(wskprops.apihost),
         "wskAuth" -> JsString(wskprops.authKey)
       ), successStatus, 200);
@@ -123,7 +144,13 @@ class ReminderSlackTests extends TestHelpers
       makePostCallWithExpectedResult(JsObject(
         "gitUrl" -> JsString(deployTestRepo),
         "manifestPath" -> JsString(phpRuntimePath),
-        "envData" -> JsObject("PACKAGE_NAME" -> JsString("myPackage")),
+        "envData" -> JsObject(
+            "PACKAGE_NAME" -> JsString("myPackage"),
+            "SLACK_WEBHOOK_URL" -> JsString("https://slack.url.com"),
+            "ALARM_CRON" -> JsObject("PACKAGE_NAME" -> JsString("1 * * * ")),
+            "RULE_NAME" -> JsString("myRule"),
+            "TRIGGER_NAME" -> JsString("myTrigger")
+        ),
         "wskApiHost" -> JsString(wskprops.apihost),
         "wskAuth" -> JsString(wskprops.authKey)
       ), successStatus, 200);
@@ -144,7 +171,13 @@ class ReminderSlackTests extends TestHelpers
       makePostCallWithExpectedResult(JsObject(
         "gitUrl" -> JsString(deployTestRepo),
         "manifestPath" -> JsString(pythonRuntimePath),
-        "envData" -> JsObject("PACKAGE_NAME" -> JsString("myPackage")),
+        "envData" -> JsObject(
+            "PACKAGE_NAME" -> JsString("myPackage"),
+            "SLACK_WEBHOOK_URL" -> JsString("https://slack.url.com"),
+            "ALARM_CRON" -> JsObject("PACKAGE_NAME" -> JsString("1 * * * ")),
+            "RULE_NAME" -> JsString("myRule"),
+            "TRIGGER_NAME" -> JsString("myTrigger")
+        ),
         "wskApiHost" -> JsString(wskprops.apihost),
         "wskAuth" -> JsString(wskprops.authKey)
       ), successStatus, 200);
@@ -165,7 +198,13 @@ class ReminderSlackTests extends TestHelpers
       makePostCallWithExpectedResult(JsObject(
         "gitUrl" -> JsString(deployTestRepo),
         "manifestPath" -> JsString(swiftRuntimePath),
-        "envData" -> JsObject("PACKAGE_NAME" -> JsString("myPackage")),
+        "envData" -> JsObject(
+            "PACKAGE_NAME" -> JsString("myPackage"),
+            "SLACK_WEBHOOK_URL" -> JsString("https://slack.url.com"),
+            "ALARM_CRON" -> JsObject("PACKAGE_NAME" -> JsString("1 * * * ")),
+            "RULE_NAME" -> JsString("myRule"),
+            "TRIGGER_NAME" -> JsString("myTrigger")
+        ),
         "wskApiHost" -> JsString(wskprops.apihost),
         "wskAuth" -> JsString(wskprops.authKey)
       ), successStatus, 200);
