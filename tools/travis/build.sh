@@ -54,7 +54,7 @@ cd $PACKAGESDIR/packageDeploy/packages
 source $PACKAGESDIR/packageDeploy/packages/installCatalog.sh $AUTH_KEY $EDGE_HOST $WSK_CLI
 
 # Install fake alarms package
-$WSK_CLI action create /whisk.system/alarms/alarm --copy /whisk.system/utils/echo --apihost $EDGE_HOST --auth $AUTH_KEY
+$WSK_CLI action create /whisk.system/alarms/alarm --copy /whisk.system/utils/echo --apihost $EDGE_HOST --auth $AUTH_KEY -i
 
 # Install alarms package
 # cd $PACKAGESDIR/alarms-package
