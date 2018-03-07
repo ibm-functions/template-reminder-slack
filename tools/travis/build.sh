@@ -54,8 +54,9 @@ cd $PACKAGESDIR/packageDeploy/packages
 source $PACKAGESDIR/packageDeploy/packages/installCatalog.sh $AUTH_KEY $EDGE_HOST $WSK_CLI
 
 # Install alarms package
-cd $PACKAGESDIR/alarms-package
-source $PACKAGESDIR/alarms-package/installCatalog.sh $AUTH_KEY $EDGE_HOST $WSK_CLI
+# cd $PACKAGESDIR/alarms-package
+# source $PACKAGESDIR/alarms-package/installCatalog.sh $AUTH_KEY $EDGE_HOST $WSK_CLI
+
 
 # Test
 cd $ROOTDIR/template-reminder-slack

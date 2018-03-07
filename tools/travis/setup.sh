@@ -20,7 +20,7 @@ git clone --depth 1 https://github.com/apache/incubator-openwhisk.git openwhisk
 git clone --depth 1 https://github.com/apache/incubator-openwhisk-package-deploy $DEPLOYDIR
 
 # shallow clone alarms package repo.
-git clone --depth 1 https://github.com/apache/incubator-openwhisk-package-alarms $ALARMSDIR
+# git clone --depth 1 https://github.com/apache/incubator-openwhisk-package-alarms $ALARMSDIR
 
 cd openwhisk
 ./tools/travis/setup.sh
