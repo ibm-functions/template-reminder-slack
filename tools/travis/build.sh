@@ -53,6 +53,9 @@ cp -r $ROOTDIR/template-reminder-slack $PACKAGESDIR/preInstalled/ibm-functions/
 cd $PACKAGESDIR/packageDeploy/packages
 source $PACKAGESDIR/packageDeploy/packages/installCatalog.sh $AUTH_KEY $EDGE_HOST $WSK_CLI
 
+# Install fake alarms package
+$WSK_CLI action create /whisk.system/alarms/alarm --copy /whisk.system/utils/echo
+
 # Install alarms package
 # cd $PACKAGESDIR/alarms-package
 # source $PACKAGESDIR/alarms-package/installCatalog.sh $AUTH_KEY $EDGE_HOST $WSK_CLI
