@@ -93,7 +93,7 @@ class ReminderSlackTests extends TestHelpers
         "envData" -> JsObject(
             "PACKAGE_NAME" -> JsString("myPackage"),
             "SLACK_WEBHOOK_URL" -> JsString("https://slack.url.com"),
-            "ALARM_CRON" -> JsObject("PACKAGE_NAME" -> JsString("1 * * * ")),
+            "ALARM_CRON" -> JsString("1 * * * "),
             "RULE_NAME" -> JsString("myRule"),
             "TRIGGER_NAME" -> JsString("myTrigger")
         ),
