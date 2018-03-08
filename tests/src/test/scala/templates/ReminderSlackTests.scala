@@ -45,6 +45,7 @@ class ReminderSlackTests extends TestHelpers
 
     val deployTestRepo = "https://github.com/ibm-functions/template-reminder-slack"
     val slackReminderActionPackage = "myPackage/send-message"
+    val fakeAlarmAction = "openwhisk-alarms/alarm"
     val deployAction = "/whisk.system/deployWeb/wskdeploy"
     val deployActionURL = s"https://${wskprops.apihost}/api/v1/web${deployAction}.http"
 
@@ -93,7 +94,7 @@ class ReminderSlackTests extends TestHelpers
         "envData" -> JsObject(
             "PACKAGE_NAME" -> JsString("myPackage"),
             "SLACK_WEBHOOK_URL" -> JsString("https://slack.url.com"),
-            "ALARM_CRON" -> JsString("1 * * * "),
+            "ALARM_CRON" -> JsString("1 * * *"),
             "RULE_NAME" -> JsString("myRule"),
             "TRIGGER_NAME" -> JsString("myTrigger")
         ),
@@ -103,6 +104,10 @@ class ReminderSlackTests extends TestHelpers
 
       withActivation(wsk.activation, wsk.action.invoke(slackReminderActionPackage)) {
         _.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
+      }
+
+      withActivation(wsk.activation, wsk.action.invoke(fakeAlarmAction, Map("message" -> "echo".toJson))) {
+        _.response.result.get.toString should include("echo")
       }
 
       val action = wsk.action.get("myPackage/send-message")
@@ -120,7 +125,7 @@ class ReminderSlackTests extends TestHelpers
         "envData" -> JsObject(
             "PACKAGE_NAME" -> JsString("myPackage"),
             "SLACK_WEBHOOK_URL" -> JsString("https://slack.url.com"),
-            "ALARM_CRON" -> JsString("1 * * * "),
+            "ALARM_CRON" -> JsString("1 * * *"),
             "RULE_NAME" -> JsString("myRule"),
             "TRIGGER_NAME" -> JsString("myTrigger")
         ),
@@ -130,6 +135,10 @@ class ReminderSlackTests extends TestHelpers
 
       withActivation(wsk.activation, wsk.action.invoke(slackReminderActionPackage)) {
         _.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
+      }
+
+      withActivation(wsk.activation, wsk.action.invoke(fakeAlarmAction, Map("message" -> "echo".toJson))) {
+        _.response.result.get.toString should include("echo")
       }
 
       val action = wsk.action.get("myPackage/send-message")
@@ -147,7 +156,7 @@ class ReminderSlackTests extends TestHelpers
         "envData" -> JsObject(
             "PACKAGE_NAME" -> JsString("myPackage"),
             "SLACK_WEBHOOK_URL" -> JsString("https://slack.url.com"),
-            "ALARM_CRON" -> JsString("1 * * * "),
+            "ALARM_CRON" -> JsString("1 * * *"),
             "RULE_NAME" -> JsString("myRule"),
             "TRIGGER_NAME" -> JsString("myTrigger")
         ),
@@ -157,6 +166,10 @@ class ReminderSlackTests extends TestHelpers
 
       withActivation(wsk.activation, wsk.action.invoke(slackReminderActionPackage)) {
         _.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
+      }
+
+      withActivation(wsk.activation, wsk.action.invoke(fakeAlarmAction, Map("message" -> "echo".toJson))) {
+        _.response.result.get.toString should include("echo")
       }
 
       val action = wsk.action.get("myPackage/send-message")
@@ -174,7 +187,7 @@ class ReminderSlackTests extends TestHelpers
         "envData" -> JsObject(
             "PACKAGE_NAME" -> JsString("myPackage"),
             "SLACK_WEBHOOK_URL" -> JsString("https://slack.url.com"),
-            "ALARM_CRON" -> JsString("1 * * * "),
+            "ALARM_CRON" -> JsString("1 * * *"),
             "RULE_NAME" -> JsString("myRule"),
             "TRIGGER_NAME" -> JsString("myTrigger")
         ),
@@ -184,6 +197,10 @@ class ReminderSlackTests extends TestHelpers
 
       withActivation(wsk.activation, wsk.action.invoke(slackReminderActionPackage)) {
         _.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
+      }
+
+      withActivation(wsk.activation, wsk.action.invoke(fakeAlarmAction, Map("message" -> "echo".toJson))) {
+        _.response.result.get.toString should include("echo")
       }
 
       val action = wsk.action.get("myPackage/send-message")
@@ -201,7 +218,7 @@ class ReminderSlackTests extends TestHelpers
         "envData" -> JsObject(
             "PACKAGE_NAME" -> JsString("myPackage"),
             "SLACK_WEBHOOK_URL" -> JsString("https://slack.url.com"),
-            "ALARM_CRON" -> JsString("1 * * * "),
+            "ALARM_CRON" -> JsString("1 * * *"),
             "RULE_NAME" -> JsString("myRule"),
             "TRIGGER_NAME" -> JsString("myTrigger")
         ),
@@ -213,6 +230,10 @@ class ReminderSlackTests extends TestHelpers
         _.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
       }
 
+      withActivation(wsk.activation, wsk.action.invoke(fakeAlarmAction, Map("message" -> "echo".toJson))) {
+        _.response.result.get.toString should include("echo")
+      }
+      
       val action = wsk.action.get("myPackage/send-message")
       verifyAction(action, slackReminderActionPackage, swiftkind)
 
