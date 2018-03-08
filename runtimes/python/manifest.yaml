@@ -35,7 +35,7 @@ packages:
           # Creating action that is sending message to slack post action
           send-message:
               function: actions/send-message.py
-              runtime: python:3
+              runtime: python-jessie:3
 
       sequences:
           # Creating sequence to connect the send-message action with the slack post action
