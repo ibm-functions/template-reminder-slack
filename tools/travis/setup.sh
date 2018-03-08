@@ -3,7 +3,6 @@
 SCRIPTDIR=$(cd $(dirname "$0") && pwd)
 HOMEDIR="$SCRIPTDIR/../../../"
 DEPLOYDIR="$HOMEDIR/openwhisk/catalog/extra-packages/packageDeploy"
-ALARMSDIR="$HOMEDIR/openwhisk/catalog/extra-packages/alarms-package"
 
 # jshint support
 sudo apt-get -y install nodejs npm
