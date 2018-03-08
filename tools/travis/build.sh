@@ -57,11 +57,6 @@ source $PACKAGESDIR/packageDeploy/packages/installCatalog.sh $AUTH_KEY $EDGE_HOS
 $WSK_CLI package create /whisk.system/alarms --apihost $EDGE_HOST --auth $AUTH_KEY --shared yes -i
 $WSK_CLI action create /whisk.system/alarms/alarm --copy /whisk.system/utils/echo --apihost $EDGE_HOST --auth $AUTH_KEY -i
 
-# Install alarms package
-# cd $PACKAGESDIR/alarms-package
-# source $PACKAGESDIR/alarms-package/installCatalog.sh $AUTH_KEY $EDGE_HOST $WSK_CLI
-
-
 # Test
 cd $ROOTDIR/template-reminder-slack
 ./gradlew :tests:test
