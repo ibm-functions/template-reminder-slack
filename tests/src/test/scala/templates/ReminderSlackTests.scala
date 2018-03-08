@@ -27,6 +27,7 @@ import java.io._
 
 import com.jayway.restassured.RestAssured
 import com.jayway.restassured.config.SSLConfig
+import spray.json.DefaultJsonProtocol._
 import spray.json._
 
 // import spray.json.DefaultJsonProtocol.StringJsonFormat
