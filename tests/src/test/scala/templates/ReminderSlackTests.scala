@@ -52,19 +52,19 @@ class ReminderSlackTests extends TestHelpers
 
     //set parameters for deploy tests
     val node8RuntimePath = "runtimes/nodejs"
-    val nodejs8folder = "../runtimes/nodejs/actions";
+    val nodejs8folder = "../runtimes/nodejs/actions"
     val nodejs8kind = JsString("nodejs:8")
     val node6RuntimePath = "runtimes/nodejs-6"
-    val nodejs6folder = "../runtimes/nodejs-6/actions";
+    val nodejs6folder = "../runtimes/nodejs-6/actions"
     val nodejs6kind = JsString("nodejs:6")
     val phpRuntimePath = "runtimes/php"
-    val phpfolder = "../runtimes/php/actions";
+    val phpfolder = "../runtimes/php/actions"
     val phpkind = JsString("php:7.1")
     val pythonRuntimePath = "runtimes/python"
-    val pythonfolder = "../runtimes/python/actions";
+    val pythonfolder = "../runtimes/python/actions"
     val pythonkind = JsString("python:2")
     val swiftRuntimePath = "runtimes/swift"
-    val swiftfolder = "../runtimes/swift/actions";
+    val swiftfolder = "../runtimes/swift/actions"
     val swiftkind = JsString("swift:3.1.1")
 
     def makePostCallWithExpectedResult(params: JsObject, expectedResult: String, expectedCode: Int) = {
@@ -84,7 +84,6 @@ class ReminderSlackTests extends TestHelpers
       wsk.parseJsonString(stdout).fields("exec").asJsObject.fields("kind") shouldBe kindValue
     }
 
-
     behavior of "Get Slack Reminder Template"
 
     // test to create the nodejs 8 slack reminder template from github url.  Will use preinstalled folder.
@@ -101,7 +100,7 @@ class ReminderSlackTests extends TestHelpers
         ),
         "wskApiHost" -> JsString(wskprops.apihost),
         "wskAuth" -> JsString(wskprops.authKey)
-      ), successStatus, 200);
+      ), successStatus, 200)
 
       withActivation(wsk.activation, wsk.action.invoke(slackReminderActionPackage)) {
         _.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
@@ -132,7 +131,7 @@ class ReminderSlackTests extends TestHelpers
         ),
         "wskApiHost" -> JsString(wskprops.apihost),
         "wskAuth" -> JsString(wskprops.authKey)
-      ), successStatus, 200);
+      ), successStatus, 200)
 
       withActivation(wsk.activation, wsk.action.invoke(slackReminderActionPackage)) {
         _.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
@@ -163,7 +162,7 @@ class ReminderSlackTests extends TestHelpers
         ),
         "wskApiHost" -> JsString(wskprops.apihost),
         "wskAuth" -> JsString(wskprops.authKey)
-      ), successStatus, 200);
+      ), successStatus, 200)
 
       withActivation(wsk.activation, wsk.action.invoke(slackReminderActionPackage)) {
         _.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
@@ -194,7 +193,7 @@ class ReminderSlackTests extends TestHelpers
         ),
         "wskApiHost" -> JsString(wskprops.apihost),
         "wskAuth" -> JsString(wskprops.authKey)
-      ), successStatus, 200);
+      ), successStatus, 200)
 
       withActivation(wsk.activation, wsk.action.invoke(slackReminderActionPackage)) {
         _.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
@@ -225,7 +224,7 @@ class ReminderSlackTests extends TestHelpers
         ),
         "wskApiHost" -> JsString(wskprops.apihost),
         "wskAuth" -> JsString(wskprops.authKey)
-      ), successStatus, 200);
+      ), successStatus, 200)
 
       withActivation(wsk.activation, wsk.action.invoke(slackReminderActionPackage)) {
         _.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
@@ -247,7 +246,7 @@ class ReminderSlackTests extends TestHelpers
      */
      it should "invoke nodejs 6 send-message.js and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
        val name = "messageNode"
-       val file = Some(new File(nodejs6folder, "send-message.js").toString());
+       val file = Some(new File(nodejs6folder, "send-message.js").toString())
        assetHelper.withCleaner(wsk.action, name) { (action, _) =>
          action.create(name, file)
        }
@@ -263,7 +262,7 @@ class ReminderSlackTests extends TestHelpers
       */
       it should "invoke nodejs 8 send-message.js and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
         val name = "messageNode"
-        val file = Some(new File(nodejs8folder, "send-message.js").toString());
+        val file = Some(new File(nodejs8folder, "send-message.js").toString())
         val kind = Option("nodejs:8")
 
         assetHelper.withCleaner(wsk.action, name) { (action, _) =>
@@ -282,7 +281,7 @@ class ReminderSlackTests extends TestHelpers
       */
       it should "invoke send-message.php and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
         val name = "messagePhp"
-        val file = Some(new File(phpfolder, "send-message.php").toString());
+        val file = Some(new File(phpfolder, "send-message.php").toString())
         assetHelper.withCleaner(wsk.action, name) { (action, _) =>
           action.create(name, file)
         }
@@ -299,7 +298,7 @@ class ReminderSlackTests extends TestHelpers
        */
        it should "invoke send-message.py and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
          val name = "messagePython"
-         val file = Some(new File(pythonfolder, "send-message.py").toString());
+         val file = Some(new File(pythonfolder, "send-message.py").toString())
          assetHelper.withCleaner(wsk.action, name) { (action, _) =>
            action.create(name, file)
          }
@@ -316,7 +315,7 @@ class ReminderSlackTests extends TestHelpers
         */
         it should "invoke send-message.swift and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
           val name = "messageSwift"
-          val file = Some(new File(swiftfolder, "send-message.swift").toString());
+          val file = Some(new File(swiftfolder, "send-message.swift").toString())
           assetHelper.withCleaner(wsk.action, name) { (action, _) =>
             action.create(name, file)
           }
