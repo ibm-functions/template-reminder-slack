@@ -248,7 +248,7 @@ class ReminderSlackTests extends TestHelpers
        val name = "messageNode"
        val file = Some(new File(nodejs6folder, "send-message.js").toString())
        assetHelper.withCleaner(wsk.action, name) { (action, _) =>
-         action.create(name, file)
+         action.create(name, file, kind = Some(nodejs6kind))
        }
 
        withActivation(wsk.activation, wsk.action.invoke(name)) {
@@ -263,10 +263,9 @@ class ReminderSlackTests extends TestHelpers
       it should "invoke nodejs 8 send-message.js and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
         val name = "messageNode"
         val file = Some(new File(nodejs8folder, "send-message.js").toString())
-        val kind = Option("nodejs:8")
 
         assetHelper.withCleaner(wsk.action, name) { (action, _) =>
-          action.create(name, file, kind)
+          action.create(name, file, kind = Some(nodejs8kind))
         }
 
         withActivation(wsk.activation, wsk.action.invoke(name)) {
@@ -283,7 +282,7 @@ class ReminderSlackTests extends TestHelpers
         val name = "messagePhp"
         val file = Some(new File(phpfolder, "send-message.php").toString())
         assetHelper.withCleaner(wsk.action, name) { (action, _) =>
-          action.create(name, file)
+          action.create(name, file, kind = Some(phpkind))
         }
 
         withActivation(wsk.activation, wsk.action.invoke(name)) {
@@ -300,7 +299,7 @@ class ReminderSlackTests extends TestHelpers
          val name = "messagePython"
          val file = Some(new File(pythonfolder, "send-message.py").toString())
          assetHelper.withCleaner(wsk.action, name) { (action, _) =>
-           action.create(name, file)
+           action.create(name, file, kind = Some(pythonkind))
          }
 
          withActivation(wsk.activation, wsk.action.invoke(name)) {
@@ -317,7 +316,7 @@ class ReminderSlackTests extends TestHelpers
           val name = "messageSwift"
           val file = Some(new File(swiftfolder, "send-message.swift").toString())
           assetHelper.withCleaner(wsk.action, name) { (action, _) =>
-            action.create(name, file)
+            action.create(name, file, kind = Some(swiftkind))
           }
 
           withActivation(wsk.activation, wsk.action.invoke(name)) {
