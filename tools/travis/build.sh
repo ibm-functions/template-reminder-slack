@@ -23,6 +23,8 @@ docker tag ibmfunctions/action-nodejs-v8 ${IMAGE_PREFIX}/action-nodejs-v8
 docker pull ibmfunctions/action-python-v3
 docker tag ibmfunctions/action-python-v3 ${IMAGE_PREFIX}/action-python-v3
 
+cd $WHISKDIR/ansible
+
 # Deploy Openwhisk
 ANSIBLE_CMD="ansible-playbook -i environments/local -e docker_image_prefix=${IMAGE_PREFIX}"
 
