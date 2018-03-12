@@ -1,4 +1,5 @@
 # template-reminder-slack
+[![Build Status](https://travis-ci.org/ibm-functions/template-reminder-slack.svg?branch=master)](https://travis-ci.org/ibm-functions/template-reminder-slack)
 
 ### Overview
 You can use this template to deploy some IBM Cloud Functions assets for you.  The assets created by this template are described in the manifest.yaml file, which can be found at `template-reminder-slack/runtimes/your_language_choice/manifest.yaml`
