@@ -65,7 +65,7 @@ class ReminderSlackTests extends TestHelpers
     val phpkind = "php:7.1"
     val pythonRuntimePath = "runtimes/python"
     val pythonfolder = "../runtimes/python/actions"
-    val pythonkind = "python:2"
+    val pythonkind = "python-jessie:3"
     val swiftRuntimePath = "runtimes/swift"
     val swiftfolder = "../runtimes/swift/actions"
     val swiftkind = "swift:3.1.1"
