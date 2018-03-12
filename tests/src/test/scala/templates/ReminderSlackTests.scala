@@ -84,7 +84,7 @@ class ReminderSlackTests extends TestHelpers
       "manifestPath" -> JsString(node8RuntimePath),
       "envData" -> JsObject(
         "PACKAGE_NAME" -> JsString(packageName),
-        "SLACK_WEBHOOK_URL" -> JsString("https://slack.url.com"),
+        "SLACK_WEBHOOK_URL" -> JsString("https://slack.com/"),
         "ALARM_CRON" -> JsString("1 * * *"),
         "RULE_NAME" -> JsString(ruleName),
         "TRIGGER_NAME" -> JsString(triggerName)
@@ -136,7 +136,7 @@ class ReminderSlackTests extends TestHelpers
       "manifestPath" -> JsString(node6RuntimePath),
       "envData" -> JsObject(
         "PACKAGE_NAME" -> JsString(packageName),
-        "SLACK_WEBHOOK_URL" -> JsString("https://slack.url.com"),
+        "SLACK_WEBHOOK_URL" -> JsString("https://slack.com/"),
         "ALARM_CRON" -> JsString("1 * * *"),
         "RULE_NAME" -> JsString(ruleName),
         "TRIGGER_NAME" -> JsString(triggerName)
@@ -162,7 +162,7 @@ class ReminderSlackTests extends TestHelpers
     verifyRuleList(rules, ruleName)
 
     val action = wsk.action.get(slackReminderAction)
-    verifyAction(action, slackReminderAction, JsString(nodejs8kind))
+    verifyAction(action, slackReminderAction, JsString(nodejs6kind))
 
     // check that sequence was created and is invoked with expected results
     val runSequence = wsk.action.invoke(slackSequence)
@@ -187,7 +187,7 @@ class ReminderSlackTests extends TestHelpers
       "manifestPath" -> JsString(phpRuntimePath),
       "envData" -> JsObject(
         "PACKAGE_NAME" -> JsString(packageName),
-        "SLACK_WEBHOOK_URL" -> JsString("https://slack.url.com"),
+        "SLACK_WEBHOOK_URL" -> JsString("https://slack.com/"),
         "ALARM_CRON" -> JsString("1 * * *"),
         "RULE_NAME" -> JsString(ruleName),
         "TRIGGER_NAME" -> JsString(triggerName)
@@ -214,7 +214,7 @@ class ReminderSlackTests extends TestHelpers
     verifyRuleList(rules, ruleName)
 
     val action = wsk.action.get(slackReminderAction)
-    verifyAction(action, slackReminderAction, JsString(nodejs8kind))
+    verifyAction(action, slackReminderAction, JsString(phpkind))
 
     // check that sequence was created and is invoked with expected results
     val runSequence = wsk.action.invoke(slackSequence)
@@ -239,7 +239,7 @@ class ReminderSlackTests extends TestHelpers
       "manifestPath" -> JsString(pythonRuntimePath),
       "envData" -> JsObject(
         "PACKAGE_NAME" -> JsString(packageName),
-        "SLACK_WEBHOOK_URL" -> JsString("https://slack.url.com"),
+        "SLACK_WEBHOOK_URL" -> JsString("https://slack.com/"),
         "ALARM_CRON" -> JsString("1 * * *"),
         "RULE_NAME" -> JsString(ruleName),
         "TRIGGER_NAME" -> JsString(triggerName)
@@ -266,7 +266,7 @@ class ReminderSlackTests extends TestHelpers
     verifyRuleList(rules, ruleName)
 
     val action = wsk.action.get(slackReminderAction)
-    verifyAction(action, slackReminderAction, JsString(nodejs8kind))
+    verifyAction(action, slackReminderAction, JsString(pythonkind))
 
     // check that sequence was created and is invoked with expected results
     val runSequence = wsk.action.invoke(slackSequence)
@@ -291,7 +291,7 @@ class ReminderSlackTests extends TestHelpers
       "manifestPath" -> JsString(swiftRuntimePath),
       "envData" -> JsObject(
         "PACKAGE_NAME" -> JsString(packageName),
-        "SLACK_WEBHOOK_URL" -> JsString("https://slack.url.com"),
+        "SLACK_WEBHOOK_URL" -> JsString("https://slack.com/"),
         "ALARM_CRON" -> JsString("1 * * *"),
         "RULE_NAME" -> JsString(ruleName),
         "TRIGGER_NAME" -> JsString(triggerName)
@@ -318,7 +318,7 @@ class ReminderSlackTests extends TestHelpers
     verifyRuleList(rules, ruleName)
 
     val action = wsk.action.get(slackReminderAction)
-    verifyAction(action, slackReminderAction, JsString(nodejs8kind))
+    verifyAction(action, slackReminderAction, JsString(swiftkind))
 
     // check that sequence was created and is invoked with expected results
     val runSequence = wsk.action.invoke(slackSequence)
