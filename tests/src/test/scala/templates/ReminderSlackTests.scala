@@ -25,12 +25,10 @@ import common.TestUtils.RunResult
 import common.ActivationResult
 import common.{TestHelpers, Wsk, WskProps, WskTestHelpers}
 import java.io._
-
 import com.jayway.restassured.RestAssured
 import com.jayway.restassured.config.SSLConfig
 import spray.json.DefaultJsonProtocol._
 import spray.json._
-
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 
@@ -171,7 +169,7 @@ class ReminderSlackTests extends TestHelpers
     // confirm trigger will fire sequence with expected result
     withActivation(wsk.activation, triggerRun) { activation =>
       val logEntry = activation.logs.get(0).parseJson.asJsObject
-      val triggerActivationId: String = logEntry.getFields("activationId")(0).convertTo[String]
+g      val triggerActivationId: String = logEntry.getFields("activationId")(0).convertTo[String]
       withActivation(wsk.activation, triggerActivationId) { triggerActivation =>
         triggerActivation.response.result.get.toString should include ("Your scrum is starting now.  Time to find your team!");
       }
