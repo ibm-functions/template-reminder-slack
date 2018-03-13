@@ -46,8 +46,8 @@ class ReminderSlackTests extends TestHelpers
     """"status":"success""""
 
   val deployTestRepo = "https://github.com/ibm-functions/template-reminder-slack"
-  val slackReminderAction = "myPackage/send-message"
-  val slackSequence = "myPackage/post_message_slack_sequence"
+  val slackReminderAction = "send-message"
+  val slackSequence = "post_message_slack_sequence"
   val packageName = "myPackage"
   val triggerName = "myTrigger"
   val ruleName = "myRule"
@@ -71,7 +71,7 @@ class ReminderSlackTests extends TestHelpers
   val pythonkind = "python-jessie:3"
   val swiftRuntimePath = "runtimes/swift"
   val swiftfolder = "../runtimes/swift/actions"
-  val swiftkind = "swift:3.1.1"
+  val swiftkind = "swift:4.1"
 
   behavior of "Get Slack Reminder Template"
 
@@ -81,6 +81,8 @@ class ReminderSlackTests extends TestHelpers
     val nodejs8Package = packageName + "nodejs8"
     val nodejs8Trigger = triggerName + "nodejs8"
     val nodejs8Rule = ruleName + "nodejs8"
+    val nodejs8SlackAction = nodejs8Package + "/" + slackReminderAction
+    val nodejs8SlackSequence = nodejs8Package + "/" + slackSequence
 
     makePostCallWithExpectedResult(JsObject(
       "gitUrl" -> JsString(deployTestRepo),
@@ -97,7 +99,7 @@ class ReminderSlackTests extends TestHelpers
     ), successStatus, 200)
 
     // check that both actions were created and can be invoked with expected results
-    withActivation(wsk.activation, wsk.action.invoke(slackReminderAction)) {
+    withActivation(wsk.activation, wsk.action.invoke(nodejs8SlackAction)) {
       _.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
     }
 
@@ -123,19 +125,19 @@ class ReminderSlackTests extends TestHelpers
     val rules = wsk.rule.list()
     verifyRuleList(rules, nodejs8Rule)
 
-    val action = wsk.action.get(slackReminderAction)
-    verifyAction(action, slackReminderAction, JsString(nodejs8kind))
+    val action = wsk.action.get(nodejs8SlackAction)
+    verifyAction(action, nodejs8SlackAction, JsString(nodejs8kind))
 
     // check that sequence was created and is invoked with expected results
-    val runSequence = wsk.action.invoke(slackSequence)
+    val runSequence = wsk.action.invoke(nodejs8SlackSequence)
     withActivation(wsk.activation, runSequence, totalWait = 2 * allowedActionDuration) { activation =>
       checkSequenceLogs(activation, 2)
       activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
     }
 
     // clean up after test
-    wsk.action.delete(slackReminderAction)
-    wsk.action.delete(slackSequence)
+    wsk.action.delete(nodejs8SlackAction)
+    wsk.action.delete(nodejs8SlackSequence)
     wsk.pkg.delete(binding)
     wsk.pkg.delete(nodejs8Package)
     wsk.trigger.delete(nodejs8Trigger)
@@ -148,6 +150,8 @@ class ReminderSlackTests extends TestHelpers
     val nodejs6Package = packageName + "nodejs6"
     val nodejs6Trigger = triggerName + "nodejs6"
     val nodejs6Rule = ruleName + "nodejs6"
+    val nodejs6SlackAction = nodejs6Package + "/" + slackReminderAction
+    val nodejs6SlackSequence = nodejs6Package + "/" + slackSequence
 
     makePostCallWithExpectedResult(JsObject(
       "gitUrl" -> JsString(deployTestRepo),
@@ -163,7 +167,7 @@ class ReminderSlackTests extends TestHelpers
       "wskAuth" -> JsString(wskprops.authKey)
     ), successStatus, 200)
     // check that both actions were created and can be invoked with expected results
-    withActivation(wsk.activation, wsk.action.invoke(slackReminderAction)) {
+    withActivation(wsk.activation, wsk.action.invoke(nodejs6SlackAction)) {
       _.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
     }
 
@@ -189,19 +193,19 @@ class ReminderSlackTests extends TestHelpers
     val rules = wsk.rule.list()
     verifyRuleList(rules, nodejs6Rule)
 
-    val action = wsk.action.get(slackReminderAction)
-    verifyAction(action, slackReminderAction, JsString(nodejs6kind))
+    val action = wsk.action.get(nodejs6SlackAction)
+    verifyAction(action, nodejs6SlackAction, JsString(nodejs6kind))
 
     // check that sequence was created and is invoked with expected results
-    val runSequence = wsk.action.invoke(slackSequence)
+    val runSequence = wsk.action.invoke(nodejs6SlackSequence)
     withActivation(wsk.activation, runSequence, totalWait = 2 * allowedActionDuration) { activation =>
       checkSequenceLogs(activation, 2)
       activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
     }
 
     // clean up after test
-    wsk.action.delete(slackReminderAction)
-    wsk.action.delete(slackSequence)
+    wsk.action.delete(nodejs6SlackAction)
+    wsk.action.delete(nodejs6SlackSequence)
     wsk.pkg.delete(binding)
     wsk.pkg.delete(nodejs6Package)
     wsk.trigger.delete(nodejs6Trigger)
@@ -214,6 +218,8 @@ class ReminderSlackTests extends TestHelpers
     val phpPackage = packageName + "php"
     val phpTrigger = triggerName + "php"
     val phpRule = ruleName + "php"
+    val phpSlackAction = phpPackage + "/" + slackReminderAction
+    val phpSlackSequence = phpPackage + "/" + slackSequence
 
     makePostCallWithExpectedResult(JsObject(
       "gitUrl" -> JsString(deployTestRepo),
@@ -230,7 +236,7 @@ class ReminderSlackTests extends TestHelpers
     ), successStatus, 200)
 
     // check that both actions were created and can be invoked with expected results
-    withActivation(wsk.activation, wsk.action.invoke(slackReminderAction)) {
+    withActivation(wsk.activation, wsk.action.invoke(phpSlackAction)) {
       _.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
     }
 
@@ -256,19 +262,19 @@ class ReminderSlackTests extends TestHelpers
     val rules = wsk.rule.list()
     verifyRuleList(rules, phpRule)
 
-    val action = wsk.action.get(slackReminderAction)
-    verifyAction(action, slackReminderAction, JsString(phpkind))
+    val action = wsk.action.get(phpSlackAction)
+    verifyAction(action, phpSlackAction, JsString(phpkind))
 
     // check that sequence was created and is invoked with expected results
-    val runSequence = wsk.action.invoke(slackSequence)
+    val runSequence = wsk.action.invoke(phpSlackSequence)
     withActivation(wsk.activation, runSequence, totalWait = 2 * allowedActionDuration) { activation =>
       checkSequenceLogs(activation, 2)
       activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
     }
 
     // clean up after test
-    wsk.action.delete(slackReminderAction)
-    wsk.action.delete(slackSequence)
+    wsk.action.delete(phpSlackAction)
+    wsk.action.delete(phpSlackSequence)
     wsk.pkg.delete(binding)
     wsk.pkg.delete(phpPackage)
     wsk.trigger.delete(phpTrigger)
@@ -281,6 +287,8 @@ class ReminderSlackTests extends TestHelpers
     val pythonPackage = packageName + "python"
     val pythonTrigger = triggerName + "python"
     val pythonRule = ruleName + "python"
+    val pythonSlackAction = pythonPackage + "/" + slackReminderAction
+    val pythonSlackSequence = pythonPackage + "/" + slackSequence
 
     makePostCallWithExpectedResult(JsObject(
       "gitUrl" -> JsString(deployTestRepo),
@@ -297,7 +305,7 @@ class ReminderSlackTests extends TestHelpers
     ), successStatus, 200)
 
     // check that both actions were created and can be invoked with expected results
-    withActivation(wsk.activation, wsk.action.invoke(slackReminderAction)) {
+    withActivation(wsk.activation, wsk.action.invoke(pythonSlackAction)) {
       _.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
     }
 
@@ -323,19 +331,19 @@ class ReminderSlackTests extends TestHelpers
     val rules = wsk.rule.list()
     verifyRuleList(rules, pythonRule)
 
-    val action = wsk.action.get(slackReminderAction)
-    verifyAction(action, slackReminderAction, JsString(pythonkind))
+    val action = wsk.action.get(pythonSlackAction)
+    verifyAction(action, pythonSlackAction, JsString(pythonkind))
 
     // check that sequence was created and is invoked with expected results
-    val runSequence = wsk.action.invoke(slackSequence)
+    val runSequence = wsk.action.invoke(pythonSlackSequence)
     withActivation(wsk.activation, runSequence, totalWait = 2 * allowedActionDuration) { activation =>
       checkSequenceLogs(activation, 2)
       activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
     }
 
     // clean up after test
-    wsk.action.delete(slackReminderAction)
-    wsk.action.delete(slackSequence)
+    wsk.action.delete(pythonSlackAction)
+    wsk.action.delete(pythonSlackSequence)
     wsk.pkg.delete(binding)
     wsk.pkg.delete(pythonPackage)
     wsk.trigger.delete(pythonTrigger)
@@ -348,6 +356,8 @@ class ReminderSlackTests extends TestHelpers
     val swiftPackage = packageName + "swift"
     val swiftTrigger = triggerName + "swift"
     val swiftRule = ruleName + "swift"
+    val swiftSlackAction = swiftPackage + "/" + slackReminderAction
+    val swiftSlackSequence = swiftPackage + "/" + slackSequence
 
     makePostCallWithExpectedResult(JsObject(
       "gitUrl" -> JsString(deployTestRepo),
@@ -364,7 +374,7 @@ class ReminderSlackTests extends TestHelpers
     ), successStatus, 200)
 
     // check that both actions were created and can be invoked with expected results
-    withActivation(wsk.activation, wsk.action.invoke(slackReminderAction)) {
+    withActivation(wsk.activation, wsk.action.invoke(swiftSlackAction)) {
       _.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
     }
 
@@ -390,19 +400,19 @@ class ReminderSlackTests extends TestHelpers
     val rules = wsk.rule.list()
     verifyRuleList(rules, swiftRule)
 
-    val action = wsk.action.get(slackReminderAction)
-    verifyAction(action, slackReminderAction, JsString(swiftkind))
+    val action = wsk.action.get(swiftSlackAction)
+    verifyAction(action, swiftSlackAction, JsString(swiftkind))
 
     // check that sequence was created and is invoked with expected results
-    val runSequence = wsk.action.invoke(slackSequence)
+    val runSequence = wsk.action.invoke(swiftSlackSequence)
     withActivation(wsk.activation, runSequence, totalWait = 2 * allowedActionDuration) { activation =>
       checkSequenceLogs(activation, 2)
       activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
     }
 
     // clean up after test
-    wsk.action.delete(slackReminderAction)
-    wsk.action.delete(slackSequence)
+    wsk.action.delete(swiftSlackAction)
+    wsk.action.delete(swiftSlackSequence)
     wsk.pkg.delete(binding)
     wsk.pkg.delete(swiftPackage)
     wsk.trigger.delete(swiftTrigger)
