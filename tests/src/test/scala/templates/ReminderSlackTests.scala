@@ -105,6 +105,16 @@ class ReminderSlackTests extends TestHelpers
     // confirm trigger exists
     val triggers = wsk.trigger.list()
     verifyTriggerList(triggers, triggerName);
+    val triggerRun = wsk.trigger.fire(triggerName)
+
+    // confirm trigger will fire sequence with expected result
+    withActivation(wsk.activation, triggerRun) { activation =>
+      val logEntry = activation.logs.get(0).parseJson.asJsObject
+      val triggerActivationId: String = logEntry.getFields("activationId")(0).convertTo[String]
+      withActivation(wsk.activation, triggerActivationId) { triggerActivation =>
+        triggerActivation.response.result.get.toString should include ("Your scrum is starting now.  Time to find your team!");
+      }
+    }
 
     // confirm rule exists
     val rules = wsk.rule.list()
@@ -156,6 +166,16 @@ class ReminderSlackTests extends TestHelpers
     // confirm trigger exists
     val triggers = wsk.trigger.list()
     verifyTriggerList(triggers, triggerName);
+    val triggerRun = wsk.trigger.fire(triggerName)
+
+    // confirm trigger will fire sequence with expected result
+    withActivation(wsk.activation, triggerRun) { activation =>
+      val logEntry = activation.logs.get(0).parseJson.asJsObject
+      val triggerActivationId: String = logEntry.getFields("activationId")(0).convertTo[String]
+      withActivation(wsk.activation, triggerActivationId) { triggerActivation =>
+        triggerActivation.response.result.get.toString should include ("Your scrum is starting now.  Time to find your team!");
+      }
+    }
 
     // confirm rule exists
     val rules = wsk.rule.list()
@@ -208,6 +228,16 @@ class ReminderSlackTests extends TestHelpers
     // confirm trigger exists
     val triggers = wsk.trigger.list()
     verifyTriggerList(triggers, triggerName);
+    val triggerRun = wsk.trigger.fire(triggerName)
+
+    // confirm trigger will fire sequence with expected result
+    withActivation(wsk.activation, triggerRun) { activation =>
+      val logEntry = activation.logs.get(0).parseJson.asJsObject
+      val triggerActivationId: String = logEntry.getFields("activationId")(0).convertTo[String]
+      withActivation(wsk.activation, triggerActivationId) { triggerActivation =>
+        triggerActivation.response.result.get.toString should include ("Your scrum is starting now.  Time to find your team!");
+      }
+    }
 
     // confirm rule exists
     val rules = wsk.rule.list()
@@ -260,6 +290,16 @@ class ReminderSlackTests extends TestHelpers
     // confirm trigger exists
     val triggers = wsk.trigger.list()
     verifyTriggerList(triggers, triggerName);
+    val triggerRun = wsk.trigger.fire(triggerName)
+
+    // confirm trigger will fire sequence with expected result
+    withActivation(wsk.activation, triggerRun) { activation =>
+      val logEntry = activation.logs.get(0).parseJson.asJsObject
+      val triggerActivationId: String = logEntry.getFields("activationId")(0).convertTo[String]
+      withActivation(wsk.activation, triggerActivationId) { triggerActivation =>
+        triggerActivation.response.result.get.toString should include ("Your scrum is starting now.  Time to find your team!");
+      }
+    }
 
     // confirm rule exists
     val rules = wsk.rule.list()
@@ -312,6 +352,16 @@ class ReminderSlackTests extends TestHelpers
     // confirm trigger exists
     val triggers = wsk.trigger.list()
     verifyTriggerList(triggers, triggerName);
+    val triggerRun = wsk.trigger.fire(triggerName)
+
+    // confirm trigger will fire sequence with expected result
+    withActivation(wsk.activation, triggerRun) { activation =>
+      val logEntry = activation.logs.get(0).parseJson.asJsObject
+      val triggerActivationId: String = logEntry.getFields("activationId")(0).convertTo[String]
+      withActivation(wsk.activation, triggerActivationId) { triggerActivation =>
+        triggerActivation.response.result.get.toString should include ("Your scrum is starting now.  Time to find your team!");
+      }
+    }
 
     // confirm rule exists
     val rules = wsk.rule.list()
