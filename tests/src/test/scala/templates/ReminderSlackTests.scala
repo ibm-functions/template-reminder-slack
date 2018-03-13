@@ -77,15 +77,20 @@ class ReminderSlackTests extends TestHelpers
 
   // test to create the nodejs 8 slack reminder template from github url.  Will use preinstalled folder.
   it should "create the nodejs 8 slack reminder action from github url" in {
+    // create unique asset names
+    val nodejs8Package = packageName + "nodejs8"
+    val nodejs8Trigger = triggerName + "nodejs8"
+    val nodejs8Rule = ruleName + "nodejs8"
+
     makePostCallWithExpectedResult(JsObject(
       "gitUrl" -> JsString(deployTestRepo),
       "manifestPath" -> JsString(node8RuntimePath),
       "envData" -> JsObject(
-        "PACKAGE_NAME" -> JsString(packageName),
+        "PACKAGE_NAME" -> JsString(nodejs8Package),
         "SLACK_WEBHOOK_URL" -> JsString("https://slack.com/"),
         "ALARM_CRON" -> JsString("1 * * *"),
-        "RULE_NAME" -> JsString(ruleName),
-        "TRIGGER_NAME" -> JsString(triggerName)
+        "RULE_NAME" -> JsString(nodejs8Rule),
+        "TRIGGER_NAME" -> JsString(nodejs8Trigger)
       ),
       "wskApiHost" -> JsString(wskprops.apihost),
       "wskAuth" -> JsString(wskprops.authKey)
@@ -102,8 +107,8 @@ class ReminderSlackTests extends TestHelpers
 
     // confirm trigger exists
     val triggers = wsk.trigger.list()
-    verifyTriggerList(triggers, triggerName);
-    val triggerRun = wsk.trigger.fire(triggerName)
+    verifyTriggerList(triggers, nodejs8Trigger);
+    val triggerRun = wsk.trigger.fire(nodejs8Trigger)
 
     // confirm trigger will fire sequence with expected result
     withActivation(wsk.activation, triggerRun) { activation =>
@@ -116,7 +121,7 @@ class ReminderSlackTests extends TestHelpers
 
     // confirm rule exists
     val rules = wsk.rule.list()
-    verifyRuleList(rules, ruleName)
+    verifyRuleList(rules, nodejs8Rule)
 
     val action = wsk.action.get(slackReminderAction)
     verifyAction(action, slackReminderAction, JsString(nodejs8kind))
@@ -132,22 +137,27 @@ class ReminderSlackTests extends TestHelpers
     wsk.action.delete(slackReminderAction)
     wsk.action.delete(slackSequence)
     wsk.pkg.delete(binding)
-    wsk.pkg.delete(packageName)
-    wsk.trigger.delete(triggerName)
-    wsk.rule.delete(ruleName)
+    wsk.pkg.delete(nodejs8Package)
+    wsk.trigger.delete(nodejs8Trigger)
+    wsk.rule.delete(nodejs8Rule)
   }
 
   // test to create the nodejs 6 slack reminder template from github url.  Will use preinstalled folder.
   it should "create the nodejs 6 slack reminder action from github url" in {
+    // create unique asset names
+    val nodejs6Package = packageName + "nodejs6"
+    val nodejs6Trigger = triggerName + "nodejs6"
+    val nodejs6Rule = ruleName + "nodejs6"
+
     makePostCallWithExpectedResult(JsObject(
       "gitUrl" -> JsString(deployTestRepo),
       "manifestPath" -> JsString(node6RuntimePath),
       "envData" -> JsObject(
-        "PACKAGE_NAME" -> JsString(packageName),
+        "PACKAGE_NAME" -> JsString(nodejs6Package),
         "SLACK_WEBHOOK_URL" -> JsString("https://slack.com/"),
         "ALARM_CRON" -> JsString("1 * * *"),
-        "RULE_NAME" -> JsString(ruleName),
-        "TRIGGER_NAME" -> JsString(triggerName)
+        "RULE_NAME" -> JsString(nodejs6Rule),
+        "TRIGGER_NAME" -> JsString(nodejs6Trigger)
       ),
       "wskApiHost" -> JsString(wskprops.apihost),
       "wskAuth" -> JsString(wskprops.authKey)
@@ -163,8 +173,8 @@ class ReminderSlackTests extends TestHelpers
 
     // confirm trigger exists
     val triggers = wsk.trigger.list()
-    verifyTriggerList(triggers, triggerName);
-    val triggerRun = wsk.trigger.fire(triggerName)
+    verifyTriggerList(triggers, nodejs6Trigger);
+    val triggerRun = wsk.trigger.fire(nodejs6Trigger)
 
     // confirm trigger will fire sequence with expected result
     withActivation(wsk.activation, triggerRun) { activation =>
@@ -177,7 +187,7 @@ class ReminderSlackTests extends TestHelpers
 
     // confirm rule exists
     val rules = wsk.rule.list()
-    verifyRuleList(rules, ruleName)
+    verifyRuleList(rules, nodejs6Rule)
 
     val action = wsk.action.get(slackReminderAction)
     verifyAction(action, slackReminderAction, JsString(nodejs6kind))
@@ -193,22 +203,27 @@ class ReminderSlackTests extends TestHelpers
     wsk.action.delete(slackReminderAction)
     wsk.action.delete(slackSequence)
     wsk.pkg.delete(binding)
-    wsk.pkg.delete(packageName)
-    wsk.trigger.delete(triggerName)
-    wsk.rule.delete(ruleName)
+    wsk.pkg.delete(nodejs6Package)
+    wsk.trigger.delete(nodejs6Trigger)
+    wsk.rule.delete(nodejs6Rule)
   }
 
   // test to create the php slack reminder template from github url.  Will use preinstalled folder.
   it should "create the php slack reminder action from github url" in {
+    // create unique asset names
+    val phpPackage = packageName + "php"
+    val phpTrigger = triggerName + "php"
+    val phpRule = ruleName + "php"
+
     makePostCallWithExpectedResult(JsObject(
       "gitUrl" -> JsString(deployTestRepo),
       "manifestPath" -> JsString(phpRuntimePath),
       "envData" -> JsObject(
-        "PACKAGE_NAME" -> JsString(packageName),
+        "PACKAGE_NAME" -> JsString(phpPackage),
         "SLACK_WEBHOOK_URL" -> JsString("https://slack.com/"),
         "ALARM_CRON" -> JsString("1 * * *"),
-        "RULE_NAME" -> JsString(ruleName),
-        "TRIGGER_NAME" -> JsString(triggerName)
+        "RULE_NAME" -> JsString(phpRule),
+        "TRIGGER_NAME" -> JsString(phpTrigger)
       ),
       "wskApiHost" -> JsString(wskprops.apihost),
       "wskAuth" -> JsString(wskprops.authKey)
@@ -225,8 +240,8 @@ class ReminderSlackTests extends TestHelpers
 
     // confirm trigger exists
     val triggers = wsk.trigger.list()
-    verifyTriggerList(triggers, triggerName);
-    val triggerRun = wsk.trigger.fire(triggerName)
+    verifyTriggerList(triggers, phpTrigger);
+    val triggerRun = wsk.trigger.fire(phpTrigger)
 
     // confirm trigger will fire sequence with expected result
     withActivation(wsk.activation, triggerRun) { activation =>
@@ -239,7 +254,7 @@ class ReminderSlackTests extends TestHelpers
 
     // confirm rule exists
     val rules = wsk.rule.list()
-    verifyRuleList(rules, ruleName)
+    verifyRuleList(rules, phpRule)
 
     val action = wsk.action.get(slackReminderAction)
     verifyAction(action, slackReminderAction, JsString(phpkind))
@@ -255,22 +270,27 @@ class ReminderSlackTests extends TestHelpers
     wsk.action.delete(slackReminderAction)
     wsk.action.delete(slackSequence)
     wsk.pkg.delete(binding)
-    wsk.pkg.delete(packageName)
-    wsk.trigger.delete(triggerName)
-    wsk.rule.delete(ruleName)
+    wsk.pkg.delete(phpPackage)
+    wsk.trigger.delete(phpTrigger)
+    wsk.rule.delete(phpRule)
   }
 
   // test to create the python slack reminder template from github url.  Will use preinstalled folder.
   it should "create the python slack reminder action from github url" in {
+    // create unique asset names
+    val pythonPackage = packageName + "python"
+    val pythonTrigger = triggerName + "python"
+    val pythonRule = ruleName + "python"
+
     makePostCallWithExpectedResult(JsObject(
       "gitUrl" -> JsString(deployTestRepo),
       "manifestPath" -> JsString(pythonRuntimePath),
       "envData" -> JsObject(
-        "PACKAGE_NAME" -> JsString(packageName),
+        "PACKAGE_NAME" -> JsString(pythonPackage),
         "SLACK_WEBHOOK_URL" -> JsString("https://slack.com/"),
         "ALARM_CRON" -> JsString("1 * * *"),
-        "RULE_NAME" -> JsString(ruleName),
-        "TRIGGER_NAME" -> JsString(triggerName)
+        "RULE_NAME" -> JsString(pythonRule),
+        "TRIGGER_NAME" -> JsString(pythonTrigger)
       ),
       "wskApiHost" -> JsString(wskprops.apihost),
       "wskAuth" -> JsString(wskprops.authKey)
@@ -287,8 +307,8 @@ class ReminderSlackTests extends TestHelpers
 
     // confirm trigger exists
     val triggers = wsk.trigger.list()
-    verifyTriggerList(triggers, triggerName);
-    val triggerRun = wsk.trigger.fire(triggerName)
+    verifyTriggerList(triggers, pythonTrigger);
+    val triggerRun = wsk.trigger.fire(pythonTrigger)
 
     // confirm trigger will fire sequence with expected result
     withActivation(wsk.activation, triggerRun) { activation =>
@@ -301,7 +321,7 @@ class ReminderSlackTests extends TestHelpers
 
     // confirm rule exists
     val rules = wsk.rule.list()
-    verifyRuleList(rules, ruleName)
+    verifyRuleList(rules, pythonRule)
 
     val action = wsk.action.get(slackReminderAction)
     verifyAction(action, slackReminderAction, JsString(pythonkind))
@@ -317,22 +337,27 @@ class ReminderSlackTests extends TestHelpers
     wsk.action.delete(slackReminderAction)
     wsk.action.delete(slackSequence)
     wsk.pkg.delete(binding)
-    wsk.pkg.delete(packageName)
-    wsk.trigger.delete(triggerName)
-    wsk.rule.delete(ruleName)
+    wsk.pkg.delete(pythonPackage)
+    wsk.trigger.delete(pythonTrigger)
+    wsk.rule.delete(pythonRule)
   }
 
   // test to create the swift slack reminder template from github url.  Will use preinstalled folder.
   it should "create the swift slack reminder action from github url" in {
+    // create unique asset names
+    val swiftPackage = packageName + "swift"
+    val swiftTrigger = triggerName + "swift"
+    val swiftRule = ruleName + "swift"
+
     makePostCallWithExpectedResult(JsObject(
       "gitUrl" -> JsString(deployTestRepo),
       "manifestPath" -> JsString(swiftRuntimePath),
       "envData" -> JsObject(
-        "PACKAGE_NAME" -> JsString(packageName),
+        "PACKAGE_NAME" -> JsString(swiftPackage),
         "SLACK_WEBHOOK_URL" -> JsString("https://slack.com/"),
         "ALARM_CRON" -> JsString("1 * * *"),
-        "RULE_NAME" -> JsString(ruleName),
-        "TRIGGER_NAME" -> JsString(triggerName)
+        "RULE_NAME" -> JsString(swiftRule),
+        "TRIGGER_NAME" -> JsString(swiftTrigger)
       ),
       "wskApiHost" -> JsString(wskprops.apihost),
       "wskAuth" -> JsString(wskprops.authKey)
@@ -349,8 +374,8 @@ class ReminderSlackTests extends TestHelpers
 
     // confirm trigger exists
     val triggers = wsk.trigger.list()
-    verifyTriggerList(triggers, triggerName);
-    val triggerRun = wsk.trigger.fire(triggerName)
+    verifyTriggerList(triggers, swiftTrigger);
+    val triggerRun = wsk.trigger.fire(swiftTrigger)
 
     // confirm trigger will fire sequence with expected result
     withActivation(wsk.activation, triggerRun) { activation =>
@@ -363,7 +388,7 @@ class ReminderSlackTests extends TestHelpers
 
     // confirm rule exists
     val rules = wsk.rule.list()
-    verifyRuleList(rules, ruleName)
+    verifyRuleList(rules, swiftRule)
 
     val action = wsk.action.get(slackReminderAction)
     verifyAction(action, slackReminderAction, JsString(swiftkind))
@@ -379,9 +404,9 @@ class ReminderSlackTests extends TestHelpers
     wsk.action.delete(slackReminderAction)
     wsk.action.delete(slackSequence)
     wsk.pkg.delete(binding)
-    wsk.pkg.delete(packageName)
-    wsk.trigger.delete(triggerName)
-    wsk.rule.delete(ruleName)
+    wsk.pkg.delete(swiftPackage)
+    wsk.trigger.delete(swiftTrigger)
+    wsk.rule.delete(swiftRule)
   }
 
   /**
