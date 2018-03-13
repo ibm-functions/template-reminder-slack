@@ -169,7 +169,7 @@ class ReminderSlackTests extends TestHelpers
     // confirm trigger will fire sequence with expected result
     withActivation(wsk.activation, triggerRun) { activation =>
       val logEntry = activation.logs.get(0).parseJson.asJsObject
-g      val triggerActivationId: String = logEntry.getFields("activationId")(0).convertTo[String]
+      val triggerActivationId: String = logEntry.getFields("activationId")(0).convertTo[String]
       withActivation(wsk.activation, triggerActivationId) { triggerActivation =>
         triggerActivation.response.result.get.toString should include ("Your scrum is starting now.  Time to find your team!");
       }
