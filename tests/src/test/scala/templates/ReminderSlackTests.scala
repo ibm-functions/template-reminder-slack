@@ -388,7 +388,7 @@ class ReminderSlackTests extends TestHelpers
     * Test the nodejs 6 "Get Slack Reminder Template" template
     */
   it should "invoke nodejs 6 send-message.js and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
-    val name = "messageNode"
+    val name = "messageNode6"
     val file = Some(new File(nodejs6folder, "send-message.js").toString())
     assetHelper.withCleaner(wsk.action, name) { (action, _) =>
       action.create(name, file, kind = Some(nodejs6kind))
@@ -404,7 +404,7 @@ class ReminderSlackTests extends TestHelpers
     * Test the nodejs 8 "Get Slack Reminder Template" template
     */
   it should "invoke nodejs 8 send-message.js and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
-    val name = "messageNode"
+    val name = "messageNode8"
     val file = Some(new File(nodejs8folder, "send-message.js").toString())
 
     assetHelper.withCleaner(wsk.action, name) { (action, _) =>
