@@ -21,14 +21,8 @@ package packages
 import org.junit.runner.RunWith
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.junit.JUnitRunner
-import common.TestUtils.RunResult
-import common.ActivationResult
 import common.{TestHelpers, Wsk, WskProps, WskTestHelpers}
 import java.io._
-import com.jayway.restassured.RestAssured
-import com.jayway.restassured.config.SSLConfig
-import spray.json.DefaultJsonProtocol._
-import spray.json._
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 
@@ -142,43 +136,5 @@ class ReminderSlackBlueTests extends TestHelpers
         activation.response.success shouldBe true
         activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
     }
-  }
-
-  /**
-    * checks logs for the activation of a sequence (length/size and ids)
-    */
-  private def checkSequenceLogs(activation: ActivationResult, size: Int) = {
-    activation.logs shouldBe defined
-    // check that the logs are what they are supposed to be (activation ids)
-    activation.logs.get.size shouldBe (size) // the number of activations in this sequence
-  }
-
-  private def makePostCallWithExpectedResult(params: JsObject, expectedResult: String, expectedCode: Int) = {
-    val response = RestAssured.given()
-      .contentType("application/json\r\n")
-      .config(RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation()))
-      .body(params.toString())
-      .post(deployActionURL)
-    assert(response.statusCode() == expectedCode)
-    response.body.asString should include(expectedResult)
-    response.body.asString.parseJson.asJsObject.getFields("activationId") should have length 1
-  }
-
-  private def verifyRuleList(ruleListResult: RunResult, ruleName: String) = {
-    val ruleList = ruleListResult.stdout
-    val listOutput = ruleList.lines
-    listOutput.find(_.contains(ruleName)).get should (include(ruleName) and include("active"))
-  }
-
-  private def verifyTriggerList(triggerListResult: RunResult, triggerName: String) = {
-    val triggerList = triggerListResult.stdout
-    val listOutput = triggerList.lines
-    listOutput.find(_.contains(triggerName)).get should include(triggerName)
-  }
-
-  private def verifyAction(action: RunResult, name: String, kindValue: JsString): Unit = {
-    val stdout = action.stdout
-    assert(stdout.startsWith(s"ok: got action $name\n"))
-    wsk.parseJsonString(stdout).fields("exec").asJsObject.fields("kind") shouldBe kindValue
   }
 }
