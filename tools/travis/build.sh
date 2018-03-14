@@ -69,4 +69,5 @@ $WSK_CLI action update /whisk.system/slack/post --copy /whisk.system/utils/echo 
 
 # Test
 cd $ROOTDIR/template-reminder-slack
-./gradlew :tests:test
+
+./gradlew tests:test -Dtest.single=ReminderSlackTests
