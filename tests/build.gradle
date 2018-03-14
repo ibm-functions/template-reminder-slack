@@ -25,7 +25,6 @@ dependencies {
 
 test {
     filter {
-        //include specific method in any of the tests
         include "**/ReminderSlackBlueTests.class"
     }
 }
