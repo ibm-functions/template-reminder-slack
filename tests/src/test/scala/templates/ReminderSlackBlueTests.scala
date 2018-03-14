@@ -33,7 +33,7 @@ import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 
 @RunWith(classOf[JUnitRunner])
-class ReminderSlackTests extends TestHelpers
+class ReminderSlackBlueTests extends TestHelpers
   with WskTestHelpers
   with BeforeAndAfterAll {
 
