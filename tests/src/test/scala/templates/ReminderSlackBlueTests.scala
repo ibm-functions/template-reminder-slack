@@ -22,17 +22,14 @@ import org.junit.runner.RunWith
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.junit.JUnitRunner
 import common.{TestHelpers, Wsk, WskProps, WskTestHelpers}
-import java.io._
-
-import spray.json.DefaultJsonProtocol.StringJsonFormat
-
 import common.TestUtils.RunResult
 import common.rest.WskRest
 import common.rest.RestResult
 import com.jayway.restassured.RestAssured
 import com.jayway.restassured.config.SSLConfig
+import java.io._
 import spray.json._
-
+import spray.json.DefaultJsonProtocol.StringJsonFormat
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 
