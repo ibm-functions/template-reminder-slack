@@ -13,40 +13,36 @@
 #   TRIGGER_NAME
 #   RULE_NAME
 
-project:
+packages:
   namespace: _
-  packages:
-      $PACKAGE_NAME:
-        dependencies:
-            # binding alarms package named openwhisk-alarms and slack package openwhisk-slack
-            openwhisk-slack:
-                location: /whisk.system/slack
-                inputs:
-                    url: $SLACK_WEBHOOK_URL
-            openwhisk-alarms:
-                location: /whisk.system/alarms
-                inputs:
-                  cron: $ALARM_CRON
-
-        triggers:
-            # Creating trigger to fire events on alarm schedule
-            $TRIGGER_NAME:
-                feed: openwhisk-alarms/alarm
-                inputs:
-                    events: 'push'
-
-        actions:
-            # Creating action that is sending message to slack post action
-            send-message:
-                function: actions/send-message.js
-                runtime: nodejs:6
-
-        sequences:
-            # Creating sequence to connect the send-message action with the slack post action
-            post_message_slack_sequence:
-                actions: send-message, openwhisk-slack/post
-        rules:
-            # Creating rule that maps alarm trigger to sequence
-            $RULE_NAME:
-                trigger: $TRIGGER_NAME
-                action: post_message_slack_sequence
+  $PACKAGE_NAME:
+    dependencies:
+        # binding alarms package named openwhisk-alarms and slack package openwhisk-slack
+        openwhisk-slack:
+            location: /whisk.system/slack
+            inputs:
+                url: $SLACK_WEBHOOK_URL
+        openwhisk-alarms:
+            location: /whisk.system/alarms
+            inputs:
+              cron: $ALARM_CRON
+    triggers:
+        # Creating trigger to fire events on alarm schedule
+        $TRIGGER_NAME:
+            feed: openwhisk-alarms/alarm
+            inputs:
+                events: 'push'
+    actions:
+        # Creating action that is sending message to slack post action
+        send-message:
+            function: actions/send-message.js
+            runtime: nodejs:6
+    sequences:
+        # Creating sequence to connect the send-message action with the slack post action
+        post_message_slack_sequence:
+            actions: send-message, openwhisk-slack/post
+    rules:
+        # Creating rule that maps alarm trigger to sequence
+        $RULE_NAME:
+            trigger: $TRIGGER_NAME
+            action: post_message_slack_sequence
