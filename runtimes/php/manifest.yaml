@@ -9,10 +9,14 @@
 # This manifest file reads following env. variables:
 #   SLACK_WEBHOOK_URL
 #   ALARM_CRON
+#   PACKAGE_NAME
+#   TRIGGER_NAME
+#   RULE_NAME
 
-packages:
+project:
+  namespace: _
+  packages:
     $PACKAGE_NAME:
-      namespace: _
       dependencies:
           # binding alarms package named openwhisk-alarms and slack package openwhisk-slack
           openwhisk-slack:
@@ -23,20 +27,17 @@ packages:
               location: /whisk.system/alarms
               inputs:
                 cron: $ALARM_CRON
-
       triggers:
           # Creating trigger to fire events on alarm schedule
           $TRIGGER_NAME:
               feed: openwhisk-alarms/alarm
               inputs:
                   events: 'push'
-
       actions:
           # Creating action that is sending message to slack post action
           send-message:
               function: actions/send-message.php
               runtime: php:7.1
-
       sequences:
           # Creating sequence to connect the send-message action with the slack post action
           post_message_slack_sequence:
