@@ -29,7 +29,7 @@ import com.jayway.restassured.RestAssured
 import com.jayway.restassured.config.SSLConfig
 import java.io._
 import spray.json._
-import spray.json.DefaultJsonProtocol.StringJsonFormat
+import spray.json.DefaultJsonProtocol._
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 
