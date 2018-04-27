@@ -15,7 +15,6 @@ cd $WHISKDIR
 tools/build/scanCode.py "$SCRIPTDIR/../.."
 
 # Build Openwhisk
-# Build Openwhisk
 TERM=dumb ./gradlew \
 :common:scala:install \
 :core:controller:install \
