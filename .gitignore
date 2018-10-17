@@ -1,6 +1,7 @@
 # Tests
 /tests/build
 /tests/out
+/tests/bin
 
 # Gradle
 .gradle
@@ -8,4 +9,7 @@
 # IntelliJ
 *.iml
 *.idea
+
+# Eclipse
+.project
 
