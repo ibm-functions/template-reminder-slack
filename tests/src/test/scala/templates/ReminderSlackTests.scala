@@ -17,25 +17,24 @@
 
 package packages
 
-
 import org.junit.runner.RunWith
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.junit.JUnitRunner
 import common.TestUtils.RunResult
-import common.ActivationResult
-import common.{TestHelpers, Wsk, WskProps, WskTestHelpers}
+import common._
+//import common.rest.WskRestOperations
 import java.io._
+
 import com.jayway.restassured.RestAssured
 import com.jayway.restassured.config.SSLConfig
 import spray.json.DefaultJsonProtocol._
 import spray.json._
+
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 
 @RunWith(classOf[JUnitRunner])
-class ReminderSlackTests extends TestHelpers
-  with WskTestHelpers
-  with BeforeAndAfterAll {
+class ReminderSlackTests extends TestHelpers with WskTestHelpers with BeforeAndAfterAll with WskActorSystem {
 
   implicit val wskprops = WskProps()
   val wsk = new Wsk()
@@ -43,7 +42,7 @@ class ReminderSlackTests extends TestHelpers
 
   // statuses for deployWeb
   val successStatus =
-    """"status":"success""""
+    """"status": "success""""
 
   val deployTestRepo = "https://github.com/ibm-functions/template-reminder-slack"
   val slackReminderAction = "send-message"
@@ -58,19 +57,19 @@ class ReminderSlackTests extends TestHelpers
 
   //set parameters for deploy tests
   val node8RuntimePath = "runtimes/nodejs"
-  val nodejs8folder = "../runtimes/nodejs/actions"
+  val nodejs8folder = "runtimes/nodejs/actions"
   val nodejs8kind = "nodejs:8"
   val node6RuntimePath = "runtimes/nodejs-6"
-  val nodejs6folder = "../runtimes/nodejs-6/actions"
+  val nodejs6folder = "runtimes/nodejs-6/actions"
   val nodejs6kind = "nodejs:6"
   val phpRuntimePath = "runtimes/php"
-  val phpfolder = "../runtimes/php/actions"
+  val phpfolder = "runtimes/php/actions"
   val phpkind = "php:7.1"
   val pythonRuntimePath = "runtimes/python"
-  val pythonfolder = "../runtimes/python/actions"
+  val pythonfolder = "runtimes/python/actions"
   val pythonkind = "python-jessie:3"
   val swiftRuntimePath = "runtimes/swift"
-  val swiftfolder = "../runtimes/swift/actions"
+  val swiftfolder = "runtimes/swift/actions"
   val swiftkind = "swift:4.1"
 
   behavior of "Get Slack Reminder Template"
@@ -85,19 +84,20 @@ class ReminderSlackTests extends TestHelpers
     val nodejs8SlackAction = nodejs8Package + "/" + slackReminderAction
     val nodejs8SlackSequence = nodejs8Package + "/" + slackSequence
 
-    makePostCallWithExpectedResult(JsObject(
-      "gitUrl" -> JsString(deployTestRepo),
-      "manifestPath" -> JsString(node8RuntimePath),
-      "envData" -> JsObject(
-        "PACKAGE_NAME" -> JsString(nodejs8Package),
-        "SLACK_WEBHOOK_URL" -> JsString("https://slack.com/"),
-        "ALARM_CRON" -> JsString("1 * * *"),
-        "RULE_NAME" -> JsString(nodejs8Rule),
-        "TRIGGER_NAME" -> JsString(nodejs8Trigger)
-      ),
-      "wskApiHost" -> JsString(wskprops.apihost),
-      "wskAuth" -> JsString(wskprops.authKey)
-    ), successStatus, 200)
+    makePostCallWithExpectedResult(
+      JsObject(
+        "gitUrl" -> JsString(deployTestRepo),
+        "manifestPath" -> JsString(node8RuntimePath),
+        "envData" -> JsObject(
+          "PACKAGE_NAME" -> JsString(nodejs8Package),
+          "SLACK_WEBHOOK_URL" -> JsString("https://slack.com/"),
+          "ALARM_CRON" -> JsString("1 * * *"),
+          "RULE_NAME" -> JsString(nodejs8Rule),
+          "TRIGGER_NAME" -> JsString(nodejs8Trigger)),
+        "wskApiHost" -> JsString(wskprops.apihost),
+        "wskAuth" -> JsString(wskprops.authKey)),
+      successStatus,
+      200)
 
     // check that both actions were created and can be invoked with expected results
     withActivation(wsk.activation, wsk.action.invoke(nodejs8SlackAction)) {
@@ -118,7 +118,8 @@ class ReminderSlackTests extends TestHelpers
       val logEntry = activation.logs.get(0).parseJson.asJsObject
       val triggerActivationId: String = logEntry.getFields("activationId")(0).convertTo[String]
       withActivation(wsk.activation, triggerActivationId) { triggerActivation =>
-        triggerActivation.response.result.get.toString should include ("Your scrum is starting now.  Time to find your team!");
+        triggerActivation.response.result.get.toString should include(
+          "Your scrum is starting now.  Time to find your team!");
       }
     }
 
@@ -155,19 +156,20 @@ class ReminderSlackTests extends TestHelpers
     val nodejs6SlackAction = nodejs6Package + "/" + slackReminderAction
     val nodejs6SlackSequence = nodejs6Package + "/" + slackSequence
 
-    makePostCallWithExpectedResult(JsObject(
-      "gitUrl" -> JsString(deployTestRepo),
-      "manifestPath" -> JsString(node6RuntimePath),
-      "envData" -> JsObject(
-        "PACKAGE_NAME" -> JsString(nodejs6Package),
-        "SLACK_WEBHOOK_URL" -> JsString("https://slack.com/"),
-        "ALARM_CRON" -> JsString("1 * * *"),
-        "RULE_NAME" -> JsString(nodejs6Rule),
-        "TRIGGER_NAME" -> JsString(nodejs6Trigger)
-      ),
-      "wskApiHost" -> JsString(wskprops.apihost),
-      "wskAuth" -> JsString(wskprops.authKey)
-    ), successStatus, 200)
+    makePostCallWithExpectedResult(
+      JsObject(
+        "gitUrl" -> JsString(deployTestRepo),
+        "manifestPath" -> JsString(node6RuntimePath),
+        "envData" -> JsObject(
+          "PACKAGE_NAME" -> JsString(nodejs6Package),
+          "SLACK_WEBHOOK_URL" -> JsString("https://slack.com/"),
+          "ALARM_CRON" -> JsString("1 * * *"),
+          "RULE_NAME" -> JsString(nodejs6Rule),
+          "TRIGGER_NAME" -> JsString(nodejs6Trigger)),
+        "wskApiHost" -> JsString(wskprops.apihost),
+        "wskAuth" -> JsString(wskprops.authKey)),
+      successStatus,
+      200)
     // check that both actions were created and can be invoked with expected results
     withActivation(wsk.activation, wsk.action.invoke(nodejs6SlackAction)) {
       _.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
@@ -187,7 +189,8 @@ class ReminderSlackTests extends TestHelpers
       val logEntry = activation.logs.get(0).parseJson.asJsObject
       val triggerActivationId: String = logEntry.getFields("activationId")(0).convertTo[String]
       withActivation(wsk.activation, triggerActivationId) { triggerActivation =>
-        triggerActivation.response.result.get.toString should include ("Your scrum is starting now.  Time to find your team!");
+        triggerActivation.response.result.get.toString should include(
+          "Your scrum is starting now.  Time to find your team!");
       }
     }
 
@@ -224,19 +227,20 @@ class ReminderSlackTests extends TestHelpers
     val phpSlackAction = phpPackage + "/" + slackReminderAction
     val phpSlackSequence = phpPackage + "/" + slackSequence
 
-    makePostCallWithExpectedResult(JsObject(
-      "gitUrl" -> JsString(deployTestRepo),
-      "manifestPath" -> JsString(phpRuntimePath),
-      "envData" -> JsObject(
-        "PACKAGE_NAME" -> JsString(phpPackage),
-        "SLACK_WEBHOOK_URL" -> JsString("https://slack.com/"),
-        "ALARM_CRON" -> JsString("1 * * *"),
-        "RULE_NAME" -> JsString(phpRule),
-        "TRIGGER_NAME" -> JsString(phpTrigger)
-      ),
-      "wskApiHost" -> JsString(wskprops.apihost),
-      "wskAuth" -> JsString(wskprops.authKey)
-    ), successStatus, 200)
+    makePostCallWithExpectedResult(
+      JsObject(
+        "gitUrl" -> JsString(deployTestRepo),
+        "manifestPath" -> JsString(phpRuntimePath),
+        "envData" -> JsObject(
+          "PACKAGE_NAME" -> JsString(phpPackage),
+          "SLACK_WEBHOOK_URL" -> JsString("https://slack.com/"),
+          "ALARM_CRON" -> JsString("1 * * *"),
+          "RULE_NAME" -> JsString(phpRule),
+          "TRIGGER_NAME" -> JsString(phpTrigger)),
+        "wskApiHost" -> JsString(wskprops.apihost),
+        "wskAuth" -> JsString(wskprops.authKey)),
+      successStatus,
+      200)
 
     // check that both actions were created and can be invoked with expected results
     withActivation(wsk.activation, wsk.action.invoke(phpSlackAction)) {
@@ -257,7 +261,8 @@ class ReminderSlackTests extends TestHelpers
       val logEntry = activation.logs.get(0).parseJson.asJsObject
       val triggerActivationId: String = logEntry.getFields("activationId")(0).convertTo[String]
       withActivation(wsk.activation, triggerActivationId) { triggerActivation =>
-        triggerActivation.response.result.get.toString should include ("Your scrum is starting now.  Time to find your team!");
+        triggerActivation.response.result.get.toString should include(
+          "Your scrum is starting now.  Time to find your team!");
       }
     }
 
@@ -294,19 +299,20 @@ class ReminderSlackTests extends TestHelpers
     val pythonSlackAction = pythonPackage + "/" + slackReminderAction
     val pythonSlackSequence = pythonPackage + "/" + slackSequence
 
-    makePostCallWithExpectedResult(JsObject(
-      "gitUrl" -> JsString(deployTestRepo),
-      "manifestPath" -> JsString(pythonRuntimePath),
-      "envData" -> JsObject(
-        "PACKAGE_NAME" -> JsString(pythonPackage),
-        "SLACK_WEBHOOK_URL" -> JsString("https://slack.com/"),
-        "ALARM_CRON" -> JsString("1 * * *"),
-        "RULE_NAME" -> JsString(pythonRule),
-        "TRIGGER_NAME" -> JsString(pythonTrigger)
-      ),
-      "wskApiHost" -> JsString(wskprops.apihost),
-      "wskAuth" -> JsString(wskprops.authKey)
-    ), successStatus, 200)
+    makePostCallWithExpectedResult(
+      JsObject(
+        "gitUrl" -> JsString(deployTestRepo),
+        "manifestPath" -> JsString(pythonRuntimePath),
+        "envData" -> JsObject(
+          "PACKAGE_NAME" -> JsString(pythonPackage),
+          "SLACK_WEBHOOK_URL" -> JsString("https://slack.com/"),
+          "ALARM_CRON" -> JsString("1 * * *"),
+          "RULE_NAME" -> JsString(pythonRule),
+          "TRIGGER_NAME" -> JsString(pythonTrigger)),
+        "wskApiHost" -> JsString(wskprops.apihost),
+        "wskAuth" -> JsString(wskprops.authKey)),
+      successStatus,
+      200)
 
     // check that both actions were created and can be invoked with expected results
     withActivation(wsk.activation, wsk.action.invoke(pythonSlackAction)) {
@@ -327,7 +333,8 @@ class ReminderSlackTests extends TestHelpers
       val logEntry = activation.logs.get(0).parseJson.asJsObject
       val triggerActivationId: String = logEntry.getFields("activationId")(0).convertTo[String]
       withActivation(wsk.activation, triggerActivationId) { triggerActivation =>
-        triggerActivation.response.result.get.toString should include ("Your scrum is starting now.  Time to find your team!");
+        triggerActivation.response.result.get.toString should include(
+          "Your scrum is starting now.  Time to find your team!");
       }
     }
 
@@ -364,19 +371,20 @@ class ReminderSlackTests extends TestHelpers
     val swiftSlackAction = swiftPackage + "/" + slackReminderAction
     val swiftSlackSequence = swiftPackage + "/" + slackSequence
 
-    makePostCallWithExpectedResult(JsObject(
-      "gitUrl" -> JsString(deployTestRepo),
-      "manifestPath" -> JsString(swiftRuntimePath),
-      "envData" -> JsObject(
-        "PACKAGE_NAME" -> JsString(swiftPackage),
-        "SLACK_WEBHOOK_URL" -> JsString("https://slack.com/"),
-        "ALARM_CRON" -> JsString("1 * * *"),
-        "RULE_NAME" -> JsString(swiftRule),
-        "TRIGGER_NAME" -> JsString(swiftTrigger)
-      ),
-      "wskApiHost" -> JsString(wskprops.apihost),
-      "wskAuth" -> JsString(wskprops.authKey)
-    ), successStatus, 200)
+    makePostCallWithExpectedResult(
+      JsObject(
+        "gitUrl" -> JsString(deployTestRepo),
+        "manifestPath" -> JsString(swiftRuntimePath),
+        "envData" -> JsObject(
+          "PACKAGE_NAME" -> JsString(swiftPackage),
+          "SLACK_WEBHOOK_URL" -> JsString("https://slack.com/"),
+          "ALARM_CRON" -> JsString("1 * * *"),
+          "RULE_NAME" -> JsString(swiftRule),
+          "TRIGGER_NAME" -> JsString(swiftTrigger)),
+        "wskApiHost" -> JsString(wskprops.apihost),
+        "wskAuth" -> JsString(wskprops.authKey)),
+      successStatus,
+      200)
 
     // check that both actions were created and can be invoked with expected results
     withActivation(wsk.activation, wsk.action.invoke(swiftSlackAction)) {
@@ -397,7 +405,8 @@ class ReminderSlackTests extends TestHelpers
       val logEntry = activation.logs.get(0).parseJson.asJsObject
       val triggerActivationId: String = logEntry.getFields("activationId")(0).convertTo[String]
       withActivation(wsk.activation, triggerActivationId) { triggerActivation =>
-        triggerActivation.response.result.get.toString should include ("Your scrum is starting now.  Time to find your team!");
+        triggerActivation.response.result.get.toString should include(
+          "Your scrum is starting now.  Time to find your team!");
       }
     }
 
@@ -425,8 +434,8 @@ class ReminderSlackTests extends TestHelpers
   }
 
   /**
-    * Test the nodejs 6 "Get Slack Reminder Template" template
-    */
+   * Test the nodejs 6 "Get Slack Reminder Template" template
+   */
   it should "invoke nodejs 6 send-message.js and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
     val timestamp: String = System.currentTimeMillis.toString
     val name = "messageNode6" + timestamp
@@ -435,15 +444,15 @@ class ReminderSlackTests extends TestHelpers
       action.create(name, file, kind = Some(nodejs6kind))
     }
 
-    withActivation(wsk.activation, wsk.action.invoke(name)) {
-      activation =>
-        activation.response.success shouldBe true
-        activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
+    withActivation(wsk.activation, wsk.action.invoke(name)) { activation =>
+      activation.response.success shouldBe true
+      activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
     }
   }
+
   /**
-    * Test the nodejs 8 "Get Slack Reminder Template" template
-    */
+   * Test the nodejs 8 "Get Slack Reminder Template" template
+   */
   it should "invoke nodejs 8 send-message.js and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
     val timestamp: String = System.currentTimeMillis.toString
     val name = "messageNode8" + timestamp
@@ -453,16 +462,15 @@ class ReminderSlackTests extends TestHelpers
       action.create(name, file, kind = Some(nodejs8kind))
     }
 
-    withActivation(wsk.activation, wsk.action.invoke(name)) {
-      activation =>
-        activation.response.success shouldBe true
-        activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
+    withActivation(wsk.activation, wsk.action.invoke(name)) { activation =>
+      activation.response.success shouldBe true
+      activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
     }
   }
 
   /**
-    * Test the php "Get Slack Reminder Template" template
-    */
+   * Test the php "Get Slack Reminder Template" template
+   */
   it should "invoke send-message.php and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
     val timestamp: String = System.currentTimeMillis.toString
     val name = "messagePhp" + timestamp
@@ -471,16 +479,15 @@ class ReminderSlackTests extends TestHelpers
       action.create(name, file, kind = Some(phpkind))
     }
 
-    withActivation(wsk.activation, wsk.action.invoke(name)) {
-      activation =>
-        activation.response.success shouldBe true
-        activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
+    withActivation(wsk.activation, wsk.action.invoke(name)) { activation =>
+      activation.response.success shouldBe true
+      activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
     }
   }
 
   /**
-    * Test the python "Get Slack Reminder Template" template
-    */
+   * Test the python "Get Slack Reminder Template" template
+   */
   it should "invoke send-message.py and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
     val timestamp: String = System.currentTimeMillis.toString
     val name = "messagePython" + timestamp
@@ -489,16 +496,15 @@ class ReminderSlackTests extends TestHelpers
       action.create(name, file, kind = Some(pythonkind))
     }
 
-    withActivation(wsk.activation, wsk.action.invoke(name)) {
-      activation =>
-        activation.response.success shouldBe true
-        activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
+    withActivation(wsk.activation, wsk.action.invoke(name)) { activation =>
+      activation.response.success shouldBe true
+      activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
     }
   }
 
   /**
-    * Test the swift "Get Slack Reminder Template" template
-    */
+   * Test the swift "Get Slack Reminder Template" template
+   */
   it should "invoke send-message.swift and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
     val timestamp: String = System.currentTimeMillis.toString
     val name = "messageSwift" + timestamp
@@ -506,16 +512,15 @@ class ReminderSlackTests extends TestHelpers
     assetHelper.withCleaner(wsk.action, name) { (action, _) =>
       action.create(name, file, kind = Some(swiftkind))
     }
-    withActivation(wsk.activation, wsk.action.invoke(name)) {
-      activation =>
-        activation.response.success shouldBe true
-        activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
+    withActivation(wsk.activation, wsk.action.invoke(name)) { activation =>
+      activation.response.success shouldBe true
+      activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
     }
   }
 
   /**
-    * checks logs for the activation of a sequence (length/size and ids)
-    */
+   * checks logs for the activation of a sequence (length/size and ids)
+   */
   private def checkSequenceLogs(activation: ActivationResult, size: Int) = {
     activation.logs shouldBe defined
     // check that the logs are what they are supposed to be (activation ids)
@@ -523,7 +528,8 @@ class ReminderSlackTests extends TestHelpers
   }
 
   private def makePostCallWithExpectedResult(params: JsObject, expectedResult: String, expectedCode: Int) = {
-    val response = RestAssured.given()
+    val response = RestAssured
+      .given()
       .contentType("application/json\r\n")
       .config(RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation()))
       .body(params.toString())
