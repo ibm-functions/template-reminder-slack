@@ -37,7 +37,7 @@ project:
           # Creating action that is sending message to slack post action
           send-message:
               function: actions/send-message.php
-              runtime: php:7.2
+              runtime: php:7.3
       sequences:
           # Creating sequence to connect the send-message action with the slack post action
           post_message_slack_sequence:

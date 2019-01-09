@@ -57,37 +57,36 @@ class ReminderSlackBlueTests extends TestHelpers with WskTestHelpers with Before
   val cron = "0 * * * *"
 
   //set parameters for deploy tests
-  val nodejs8kind = "nodejs:8"
-  val nodejs6kind = "nodejs:6"
-  val phpkind = "php:7.2"
+  val nodejskind = "nodejs:10"
+  val phpkind = "php:7.3"
   val pythonkind = "python:3.7"
-  val swiftkind = "swift:4.1"
+  val swiftkind = "swift:4.2"
 
   behavior of "Get Slack Reminder Template"
 
-  // test to create the nodejs 8 reminder slack template from github url.  Will use preinstalled folder.
-  it should "create the nodejs 8 reminder slack template from github url" in withAssetCleaner(wskprops) {
+  // test to create the nodejs 10 reminder slack template from github url.  Will use preinstalled folder.
+  it should "create the nodejs 10 reminder slack template from github url" in withAssetCleaner(wskprops) {
     (wp, assetHelper) =>
       // create unique asset names
       val timestamp: String = System.currentTimeMillis.toString
-      val nodejs8Package = packageName + timestamp
-      val nodejs8Trigger = triggerName + timestamp
-      val nodejs8Rule = ruleName + timestamp
-      val nodejs8SlackAction = nodejs8Package + "/" + slackAction
-      val nodejs8Sequence = nodejs8Package + "/" + slackSequence
-      val nodejs8RuntimePath = "runtimes/nodejs"
+      val nodejsPackage = packageName + timestamp
+      val nodejsTrigger = triggerName + timestamp
+      val nodejsRule = ruleName + timestamp
+      val nodejsSlackAction = nodejsPackage + "/" + slackAction
+      val nodejsSequence = nodejsPackage + "/" + slackSequence
+      val nodejsRuntimePath = "runtimes/nodejs"
 
       // post call to deploy package to test deploy of manifest
       makePostCallWithExpectedResult(
         JsObject(
           "gitUrl" -> JsString(deployTestRepo),
-          "manifestPath" -> JsString(nodejs8RuntimePath),
+          "manifestPath" -> JsString(nodejsRuntimePath),
           "envData" -> JsObject(
-            "PACKAGE_NAME" -> JsString(nodejs8Package),
+            "PACKAGE_NAME" -> JsString(nodejsPackage),
             "SLACK_WEBHOOK_URL" -> JsString("https://hooks.slack.com"),
             "ALARM_CRON" -> JsString(cron),
-            "TRIGGER_NAME" -> JsString(nodejs8Trigger),
-            "RULE_NAME" -> JsString(nodejs8Rule)),
+            "TRIGGER_NAME" -> JsString(nodejsTrigger),
+            "RULE_NAME" -> JsString(nodejsRule)),
           "wskApiHost" -> JsString(wskprops.apihost),
           "wskAuth" -> JsString(wskprops.authKey)),
         successStatus,
@@ -98,16 +97,16 @@ class ReminderSlackBlueTests extends TestHelpers with WskTestHelpers with Before
         _.response.result.get.toString should include("No text provided")
       }
 
-      withActivation(wsk.activation, wsk.action.invoke(nodejs8SlackAction)) {
+      withActivation(wsk.activation, wsk.action.invoke(nodejsSlackAction)) {
         _.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
       }
 
       // confirm trigger exists
       val triggers = wsk.trigger.list()
-      verifyTriggerList(triggers, nodejs8Trigger)
+      verifyTriggerList(triggers, nodejsTrigger)
 
       // confirm trigger will fire
-      val triggerRun = wsk.trigger.fire(nodejs8Trigger)
+      val triggerRun = wsk.trigger.fire(nodejsTrigger)
       withActivation(wsk.activation, triggerRun) { activation =>
         val logEntry = activation.logs.get(0).parseJson.asJsObject
         val triggerActivationId: String = logEntry.getFields("activationId")(0).convertTo[String]
@@ -118,99 +117,25 @@ class ReminderSlackBlueTests extends TestHelpers with WskTestHelpers with Before
 
       // confirm rule exists
       val rules = wsk.rule.list()
-      verifyRule(rules, nodejs8Rule, nodejs8Trigger, nodejs8Sequence)
+      verifyRule(rules, nodejsRule, nodejsTrigger, nodejsSequence)
 
       // check that sequence was created and contains correct actions
       val compValue =
-        JsArray(JsString("/" + namespace + "/" + nodejs8SlackAction), JsString("/" + namespace + "/" + slackPostAction))
-      val sequence = wsk.action.get(nodejs8Sequence)
-      verifyActionSequence(sequence, nodejs8Sequence, compValue, JsString("sequence"))
+        JsArray(JsString("/" + namespace + "/" + nodejsSlackAction), JsString("/" + namespace + "/" + slackPostAction))
+      val sequence = wsk.action.get(nodejsSequence)
+      verifyActionSequence(sequence, nodejsSequence, compValue, JsString("sequence"))
 
       // verify action exists as correct kind
-      val action = wsk.action.get(nodejs8SlackAction)
-      verifyAction(action, nodejs8SlackAction, JsString(nodejs8kind))
+      val action = wsk.action.get(nodejsSlackAction)
+      verifyAction(action, nodejsSlackAction, JsString(nodejskind))
 
       // clean up after test
-      wsk.action.delete(nodejs8SlackAction)
-      wsk.action.delete(nodejs8Sequence)
+      wsk.action.delete(nodejsSlackAction)
+      wsk.action.delete(nodejsSequence)
       wsk.pkg.delete(bindingSlack)
-      wsk.pkg.delete(nodejs8Package)
-      wsk.trigger.delete(nodejs8Trigger)
-      wsk.rule.delete(nodejs8Rule)
-  }
-
-  // test to create the nodejs 6 reminder slack template from github url.  Will use preinstalled folder.
-  it should "create the nodejs 6 reminder slack template from github url" in withAssetCleaner(wskprops) {
-    (wp, assetHelper) =>
-      // create unique asset names
-      val timestamp: String = System.currentTimeMillis.toString
-      val nodejs6Package = packageName + timestamp
-      val nodejs6Trigger = triggerName + timestamp
-      val nodejs6Rule = ruleName + timestamp
-      val nodejs6SlackAction = nodejs6Package + "/" + slackAction
-      val nodejs6Sequence = nodejs6Package + "/" + slackSequence
-      val nodejs6RuntimePath = "runtimes/nodejs-6"
-
-      // post call to deploy package to test deploy of manifest
-      makePostCallWithExpectedResult(
-        JsObject(
-          "gitUrl" -> JsString(deployTestRepo),
-          "manifestPath" -> JsString(nodejs6RuntimePath),
-          "envData" -> JsObject(
-            "PACKAGE_NAME" -> JsString(nodejs6Package),
-            "SLACK_WEBHOOK_URL" -> JsString("https://hooks.slack.com"),
-            "ALARM_CRON" -> JsString(cron),
-            "TRIGGER_NAME" -> JsString(nodejs6Trigger),
-            "RULE_NAME" -> JsString(nodejs6Rule)),
-          "wskApiHost" -> JsString(wskprops.apihost),
-          "wskAuth" -> JsString(wskprops.authKey)),
-        successStatus,
-        200)
-
-      // check that both actions were created and can be invoked
-      withActivation(wsk.activation, wsk.action.invoke(slackPostAction)) {
-        _.response.result.get.toString should include("No text provided")
-      }
-
-      withActivation(wsk.activation, wsk.action.invoke(nodejs6SlackAction)) {
-        _.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
-      }
-
-      // confirm trigger exists
-      val triggers = wsk.trigger.list()
-      verifyTriggerList(triggers, nodejs6Trigger)
-
-      // confirm trigger will fire
-      val triggerRun = wsk.trigger.fire(nodejs6Trigger)
-      withActivation(wsk.activation, triggerRun) { activation =>
-        val logEntry = activation.logs.get(0).parseJson.asJsObject
-        val triggerActivationId: String = logEntry.getFields("activationId")(0).convertTo[String]
-        withActivation(wsk.activation, triggerActivationId) { triggerActivation =>
-          triggerActivation.response.status should include("success")
-        }
-      }
-
-      // confirm rule exists
-      val rules = wsk.rule.list()
-      verifyRule(rules, nodejs6Rule, nodejs6Trigger, nodejs6Sequence)
-
-      // check that sequence was created and contains correct actions
-      val compValue =
-        JsArray(JsString("/" + namespace + "/" + nodejs6SlackAction), JsString("/" + namespace + "/" + slackPostAction))
-      val sequence = wsk.action.get(nodejs6Sequence)
-      verifyActionSequence(sequence, nodejs6Sequence, compValue, JsString("sequence"))
-
-      // verify action exists as correct kind
-      val action = wsk.action.get(nodejs6SlackAction)
-      verifyAction(action, nodejs6SlackAction, JsString(nodejs6kind))
-
-      // clean up after test
-      wsk.action.delete(nodejs6SlackAction)
-      wsk.action.delete(nodejs6Sequence)
-      wsk.pkg.delete(bindingSlack)
-      wsk.pkg.delete(nodejs6Package)
-      wsk.trigger.delete(nodejs6Trigger)
-      wsk.rule.delete(nodejs6Rule)
+      wsk.pkg.delete(nodejsPackage)
+      wsk.trigger.delete(nodejsTrigger)
+      wsk.rule.delete(nodejsRule)
   }
 
   // test to create the php reminder slack template from github url.  Will use preinstalled folder.
@@ -436,34 +361,16 @@ class ReminderSlackBlueTests extends TestHelpers with WskTestHelpers with Before
   }
 
   /**
-   * Test the nodejs 6 "Get Slack Reminder Template" template
+   * Test the nodejs 10 "Get Slack Reminder Template" template
    */
-  it should "invoke nodejs 6 send-message.js and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
-    val nodejs6folder = "../runtimes/nodejs-6/actions"
-    val timestamp: String = System.currentTimeMillis.toString
-    val name = "messageNode6" + timestamp
-    val file = Some(new File(nodejs6folder, "send-message.js").toString())
-    assetHelper.withCleaner(wsk.action, name) { (action, _) =>
-      action.create(name, file, kind = Some(nodejs6kind))
-    }
-
-    withActivation(wsk.activation, wsk.action.invoke(name)) { activation =>
-      activation.response.success shouldBe true
-      activation.response.result.get.toString should include("Your scrum is starting now.  Time to find your team!")
-    }
-  }
-
-  /**
-   * Test the nodejs 8 "Get Slack Reminder Template" template
-   */
-  it should "invoke nodejs 8 send-message.js and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
-    val nodejs8folder = "../runtimes/nodejs/actions"
+  it should "invoke nodejs 10 send-message.js and get the result" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
+    val nodejsfolder = "../runtimes/nodejs/actions"
     val timestamp: String = System.currentTimeMillis.toString
     val name = "messageNode8" + timestamp
-    val file = Some(new File(nodejs8folder, "send-message.js").toString())
+    val file = Some(new File(nodejsfolder, "send-message.js").toString())
 
     assetHelper.withCleaner(wsk.action, name) { (action, _) =>
-      action.create(name, file, kind = Some(nodejs8kind))
+      action.create(name, file, kind = Some(nodejskind))
     }
 
     withActivation(wsk.activation, wsk.action.invoke(name)) { activation =>
