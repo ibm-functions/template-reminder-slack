@@ -17,16 +17,15 @@
 
 package packages
 
+import common.TestUtils.RunResult
+import common._
 import org.junit.runner.RunWith
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.junit.JUnitRunner
-import common.TestUtils.RunResult
-import common._
-//import common.rest.WskRestOperations
 import java.io._
 
-import com.jayway.restassured.RestAssured
-import com.jayway.restassured.config.SSLConfig
+import io.restassured.RestAssured
+import io.restassured.config.SSLConfig
 import spray.json.DefaultJsonProtocol._
 import spray.json._
 
