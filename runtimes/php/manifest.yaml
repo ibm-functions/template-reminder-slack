@@ -1,4 +1,4 @@
-4# Deployment using this manifest file creates following OpenWhisk components:
+# Deployment using this manifest file creates following OpenWhisk components:
 #   Package:    openwhisk-slack
 #   Package:    openwhisk-alarms
 #   Action:     send-message
