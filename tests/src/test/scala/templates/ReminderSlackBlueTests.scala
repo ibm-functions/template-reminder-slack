@@ -57,9 +57,9 @@ class ReminderSlackBlueTests extends TestHelpers with WskTestHelpers with Before
   val cron = "0 * * * *"
 
   //set parameters for deploy tests
-  val nodejskind = "nodejs:10"
-  val phpkind = "php:7.3"
-  val pythonkind = "python:3.7"
+  val nodejskind = "nodejs:12"
+  val phpkind = "php:7.4"
+  val pythonkind = "python:3.9"
   val swiftkind = "swift:4.2"
 
   behavior of "Get Slack Reminder Template"
